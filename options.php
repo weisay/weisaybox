@@ -193,6 +193,15 @@ function optionsframework_options() {
 		'class' => 'mini',
 		'type' => 'text'
 	);
+	
+	$options[] = array(
+		'name' => __( '侧边栏热门日志天数范围', 'theme-textdomain' ),
+		'desc' => __( '默认选择最近365天的文章，可以根据文章发布频次自行调整选择的天数范围', 'theme-textdomain' ),
+		'id' => $shortname."_hotpostno",
+		'std' => '365',
+		'class' => 'mini',
+		'type' => 'text'
+	);
 
 	$options[] = array(
 		'name' => __( '打赏设置', 'theme-textdomain' ),

@@ -3,6 +3,8 @@ https://www.weisay.com/blog/wordpress-theme-weisay-box.html
 
 
 版本更新日志：
+V5.0.7		2024-11-17
+后台主题设置中新增可自定义侧边栏热门日志天数范围
 
 V5.0.6		2024-05-15
 在大分辨率下新增1400px宽度的自适应样式；

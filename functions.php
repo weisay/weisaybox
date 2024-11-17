@@ -50,9 +50,9 @@ if ( function_exists('register_nav_menus') ) {
 
 if ( ! function_exists( 'weisaybox_styles' ) ) {
 	function weisaybox_styles() {
-		wp_enqueue_style( 'weisaybox-mmenu', get_template_directory_uri().'/mmenu.css','','5.0.6','all' );
-		wp_enqueue_style( 'weisaybox-style', get_stylesheet_uri(),'','5.0.6','all' );
-		wp_enqueue_style( 'weisaybox-dark', get_template_directory_uri().'/dark.css','','5.0.6','all' );
+		wp_enqueue_style( 'weisaybox-mmenu', get_template_directory_uri().'/mmenu.css','','5.0.7','all' );
+		wp_enqueue_style( 'weisaybox-style', get_stylesheet_uri(),'','5.0.7','all' );
+		wp_enqueue_style( 'weisaybox-dark', get_template_directory_uri().'/dark.css','','5.0.7','all' );
 	}
 }
 add_action( 'wp_enqueue_scripts', 'weisaybox_styles', '1' );
@@ -125,8 +125,12 @@ function simple_get_most_viewed($posts_num=10, $days=700){
 }
 
 //热门日志
-function get_timespan_most_viewed($mode = '', $limit = 10, $days = 365, $display = true) {
-global $wpdb, $post;
+function get_timespan_most_viewed($mode = '', $limit = 10, $display = true) {
+global $wpdb, $post, $days;
+$days = weisay_option('wei_hotpostno');
+	if (empty($days)){
+		$days = 365;
+	}
 $limit_date = current_time('timestamp') - ($days*86400);
 $limit_date = date("Y-m-d H:i:s",$limit_date);
 $where = '';
@@ -145,7 +149,7 @@ $post_views = number_format($post_views);
 $temp .= "<li><a href=\"".get_permalink()."\" title=\"".get_the_title()."\">$post_title</a></li>";
 }
 } else {
-$temp = '<li>'.__('N/A', 'wp-postviews').'</li>'."\n";
+$temp = '<li>'.__('暂无热门日志', 'wp-postviews').'</li>'."\n";
 }
 if($display) {
 echo $temp;
@@ -155,8 +159,12 @@ return $temp;
 }
 
 //分类热门日志
-function get_timespan_most_viewed_category($type, $mode = '', $limit = 10, $days = 365, $display = true) {
-	global $wpdb, $post, $id;
+function get_timespan_most_viewed_category($type, $mode = '', $limit = 10, $display = true) {
+	global $wpdb, $post, $id, $days;
+	$days = weisay_option('wei_hotpostno');
+	if (empty($days)){
+		$days = 365;
+	}
 	$categories = null;
 	if ($type == 'single') {
 		$categories = get_the_category($id);
@@ -190,7 +198,7 @@ function get_timespan_most_viewed_category($type, $mode = '', $limit = 10, $days
 	$temp .= "<li><a href=\"".get_permalink()."\" title=\"".get_the_title()."\">$post_title</a></li>";
 	}
 	} else {
-	$temp = '<li>'.__('N/A', 'wp-postviews').'</li>'."\n";
+	$temp = '<li>'.__('暂无热门日志', 'wp-postviews').'</li>'."\n";
 	}
 	if($display) {
 		echo $temp;
@@ -417,7 +425,7 @@ function weisay_end_comment() {
 }
 
 //走心评论独立页面使用
-function touching_comments_list($comment) {
+function weisay_touching_comments_list($comment) {
 	$cpage = get_page_of_comment( $comment->comment_ID, $args = array() );
 ?>
 <li <?php comment_class(); ?> id="comment-<?php comment_ID() ?>">
@@ -433,7 +441,7 @@ function touching_comments_list($comment) {
 	</div><div class="clear"></div>
 <?php
 }
-function touching_comments_end_list() {
+function weisay_touching_comments_end_list() {
 		echo '</li>';
 }
 
@@ -445,7 +453,7 @@ function touching_comments_end_list() {
  *  comment_id: 评论ID
  *  _wpnonce: 避免意外提交
  */
-function touching_comments_karma_request() {
+function weisay_touching_comments_karma_request() {
 	// Check if we're on the correct url
 	global $wp;
 	$current_slug = add_query_arg( array(), $wp->request );
@@ -527,7 +535,7 @@ function touching_comments_karma_request() {
 	exit(json_encode($result));
 }
 
-add_action( 'template_redirect', 'touching_comments_karma_request', 0);
+add_action( 'template_redirect', 'weisay_touching_comments_karma_request', 0);
 
 //评论邮件通知
 function comment_mail_notify($comment_id) {

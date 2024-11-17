@@ -32,8 +32,8 @@ Template Name: Touching
 		wp_list_comments(array(
 			'max_depth' => -1,
 			'type' => 'comment',
-			'callback' => 'touching_comments_list',
-			'end-callback' => 'touching_comments_end_list',
+			'callback' => 'weisay_touching_comments_list',
+			'end-callback' => 'weisay_touching_comments_end_list',
 			'per_page' => 20,
 			'reverse_top_level' => false
 		),$comments);
