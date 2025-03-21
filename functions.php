@@ -50,9 +50,9 @@ if ( function_exists('register_nav_menus') ) {
 
 if ( ! function_exists( 'weisaybox_styles' ) ) {
 	function weisaybox_styles() {
-		wp_enqueue_style( 'weisaybox-mmenu', get_template_directory_uri().'/mmenu.css','','5.0.7','all' );
-		wp_enqueue_style( 'weisaybox-style', get_stylesheet_uri(),'','5.0.7','all' );
-		wp_enqueue_style( 'weisaybox-dark', get_template_directory_uri().'/dark.css','','5.0.7','all' );
+		wp_enqueue_style( 'weisaybox-mmenu', get_template_directory_uri().'/mmenu.css','','5.0.8','all' );
+		wp_enqueue_style( 'weisaybox-style', get_stylesheet_uri(),'','5.0.8','all' );
+		wp_enqueue_style( 'weisaybox-dark', get_template_directory_uri().'/dark.css','','5.0.8','all' );
 	}
 }
 add_action( 'wp_enqueue_scripts', 'weisaybox_styles', '1' );
