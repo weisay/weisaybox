@@ -24,7 +24,7 @@ $post = get_post($comment_post_ID);
 
 if ( empty($post->comment_status) ) {
 	do_action('comment_id_not_found', $comment_post_ID);
-	err(__('评论状态无效.')); // 將 exit 改為錯誤提示
+	err(__('评论状态无效。')); // 將 exit 改為錯誤提示
 }
 
 // get_post_status() will get the parent status for attachments.
@@ -34,16 +34,16 @@ $status_obj = get_post_status_object($status);
 
 if ( !comments_open($comment_post_ID) ) {
 	do_action('comment_closed', $comment_post_ID);
-	err(__('对不起,该文章的评论已关闭.')); // 將 wp_die 改為錯誤提示
+	err(__('对不起，该文章的评论已关闭。')); // 將 wp_die 改為錯誤提示
 } elseif ( 'trash' == $status ) {
 	do_action('comment_on_trash', $comment_post_ID);
-	err(__('评论状态无效.')); // 將 exit 改為錯誤提示
+	err(__('评论状态无效。')); // 將 exit 改為錯誤提示
 } elseif ( !$status_obj->public && !$status_obj->private ) {
 	do_action('comment_on_draft', $comment_post_ID);
-	err(__('评论状态无效.')); // 將 exit 改為錯誤提示
+	err(__('评论状态无效。')); // 將 exit 改為錯誤提示
 } elseif ( post_password_required($comment_post_ID) ) {
 	do_action('comment_on_password_protected', $comment_post_ID);
-	err(__('密码保护.')); // 將 exit 改為錯誤提示
+	err(__('密码保护。')); // 將 exit 改為錯誤提示
 } else {
 	do_action('pre_comment_on_post', $comment_post_ID);
 }
@@ -70,20 +70,20 @@ if ( $user->exists() ) {
 	}
 } else {
 	if ( get_option('comment_registration') || 'private' == $status )
-		err(__('对不起,您必须登录后才能发表评论.')); // 將 wp_die 改為錯誤提示
+		err(__('对不起，您必须登录后才能发表评论。')); // 將 wp_die 改為錯誤提示
 }
 
 $comment_type = '';
 
 if ( get_option('require_name_email') && !$user->exists() ) {
 	if ( 6 > strlen($comment_author_email) || '' == $comment_author )
-		err( __('错误：请填写所需的昵称或邮箱.') ); // 將 wp_die 改為錯誤提示
+		err( __('错误：请填写所需的昵称或邮箱。') ); // 將 wp_die 改為錯誤提示
 	elseif ( !is_email($comment_author_email))
-		err( __('错误：请输入有效的电子邮件地址.') ); // 將 wp_die 改為錯誤提示
+		err( __('错误：请输入有效的电子邮件地址。') ); // 將 wp_die 改為錯誤提示
 }
 
 if ( '' == $comment_content )
-	err( __('错误：请输入评论内容.') ); // 將 wp_die 改為錯誤提示
+	err( __('错误：请输入评论内容。') ); // 將 wp_die 改為錯誤提示
 
 // 增加: 錯誤提示功能
 function err($ErrMsg) {
@@ -97,7 +97,7 @@ $dupe = "SELECT comment_ID FROM $wpdb->comments WHERE comment_post_ID = '$commen
 if ( $comment_author_email ) $dupe .= "OR comment_author_email = '$comment_author_email' ";
 $dupe .= ") AND comment_content = '$comment_content' LIMIT 1";
 if ( $wpdb->get_var($dupe) ) {
-	err(__('发现重复的评论，它看起来好像您已经说过了!'));
+	err(__('发现重复的评论，它看起来好像您已经说过了。'));
 }
 
 // 增加: 檢查評論太快功能

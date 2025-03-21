@@ -16,9 +16,9 @@ var edit_mode = '1', // 再編輯模式 ( '1'=開; '0'=不開 )
 		txt1 = '<div id="loading" class="comment-tips"><img src="' + pic_sb + '" style="vertical-align:middle;" alt=""/> 正在提交, 请稍候...</div>',
 		txt2 = '<div id="error" class="comment-tips">#</div>',
 		txt3 = '"> <div id="edita"><img src="' + pic_ys + '" style="vertical-align:middle;" alt=""/> 提交成功',
-		edt1 = ',刷新页面之前你可以 <a rel="nofollow" class="comment-reply-link_a" href="#edit" onclick=\'return addComment.moveForm("',
-		edt2 = ')\'>[ 编辑留言内容 ]</a></div> ',
-		cancel_edit = '[ 取消编辑 ]',
+		edt1 = ',刷新页面之前你可以 <a rel="nofollow" class="comment-reply-link comment-reply-link-edit" href="#edit" onclick=\'return addComment.moveForm("',
+		edt2 = ')\'>再次编辑</a></div> ',
+		cancel_edit = '取消编辑',
 		edit, num = 1, comm_array=[]; comm_array.push('');
 
 jQuery(document).ready(function($) {
@@ -167,13 +167,13 @@ function exit_prev_edit() {
 		edit = '';
 }
 
-var wait = 8, submit_val = $submit.val();
+var wait = 12, submit_val = $submit.val();
 function countdown() {
 	if ( wait > 0 ) {
 		$submit.val(wait); wait--; setTimeout(countdown, 1000);
 	} else {
 		$submit.val(submit_val).attr('disabled', false).fadeTo('slow', 1);
-		wait = 8;
+		wait = 12;
 	}
 }
 });// end jQ

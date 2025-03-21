@@ -22,6 +22,11 @@ function optionsframework_options() {
 		'three' => __( '特色图片>自定义缩略图>文章第一张图>随机缩略图', 'theme-textdomain' ),
 	);
 	
+	$linkpage_array = array(
+		'one' => __( '完整链接信息', 'theme-textdomain' ),
+		'two' => __( '基础链接信息', 'theme-textdomain' ),
+	);
+	
 	$gravatar_array = array(
 		'one' => __( 'Cravatar源', 'theme-textdomain' ),
 		'two' => __( 'weavatar源', 'theme-textdomain' ),
@@ -32,7 +37,7 @@ function optionsframework_options() {
 	$options = array();
 
 	$options[] = array(
-		'name' => __( '基础设置', 'theme-textdomain' ),
+		'name' => __( '全局设置', 'theme-textdomain' ),
 		'type' => 'heading'
 	);
 	
@@ -101,28 +106,19 @@ function optionsframework_options() {
 	);
 
 	$options[] = array(
-		'name' => __( '功能设置', 'theme-textdomain' ),
+		'name' => __( '基础功能设置', 'theme-textdomain' ),
 		'type' => 'heading'
 	);
 
 	$options[] = array(
-		'name' => __( '缩略图类型', 'theme-textdomain' ),
-		'desc' => __( '选择缩略图展示的优先级，> 符号前面的优先展示', 'theme-textdomain' ),
-		'id' => $shortname."_thumbnail",
-		'std' => 'one',
+		'name' => __( '是否展示导航栏的搜索框', 'theme-textdomain' ),
+		'desc' => __( '默认展示', 'theme-textdomain' ),
+		'id' => $shortname."_search",
+		'std' => 'display',
 		'type' => 'select',
-		'options' => $thumbnail_array
+		'options' => $whether_array
 	);
 	
-	$options[] = array(
-		'name' => __( 'Gravatar头像替换源', 'theme-textdomain' ),
-		'desc' => __( '解决Gravatar无法展示的问题，默认使用Cravatar', 'theme-textdomain' ),
-		'id' => $shortname."_gravatar",
-		'std' => 'one',
-		'type' => 'select',
-		'options' => $gravatar_array
-	);
-
 	$options[] = array(
 		'name' => __( '是否展示顶部独立页面链接', 'theme-textdomain' ),
 		'desc' => __( '默认展示', 'theme-textdomain' ),
@@ -160,6 +156,56 @@ function optionsframework_options() {
 	);
 	
 	$options[] = array(
+		'name' => __( '首页展示某分类友链', 'theme-textdomain' ),
+		'desc' => __( '如果友链有分类，可以在首页展示某分类的友链，填写分类ID，全展示则不需要修改', 'theme-textdomain' ),
+		'id' => $shortname."_linkid",
+		'std' => '0',
+		'class' => 'mini',
+		'type' => 'text'
+	);
+	
+	$options[] = array(
+		'name' => __( '侧边栏热门日志天数范围', 'theme-textdomain' ),
+		'desc' => __( '默认选择最近365天的文章，可以根据文章发布频次自行调整选择的天数范围', 'theme-textdomain' ),
+		'id' => $shortname."_hotpostno",
+		'std' => '365',
+		'class' => 'mini',
+		'type' => 'text'
+	);
+	
+	$options[] = array(
+		'name' => __( '特色功能设置', 'theme-textdomain' ),
+		'type' => 'heading'
+	);
+	
+	$options[] = array(
+		'name' => __( '缩略图类型', 'theme-textdomain' ),
+		'desc' => __( '选择缩略图展示的优先级，> 符号前面的优先展示', 'theme-textdomain' ),
+		'id' => $shortname."_thumbnail",
+		'std' => 'one',
+		'type' => 'select',
+		'options' => $thumbnail_array
+	);
+	
+	$options[] = array(
+		'name' => __( '友情链接页面展示', 'theme-textdomain' ),
+		'desc' => __( '完整链接可以展示图片、名称和描述（需先填写），基础链接则不展示描述', 'theme-textdomain' ),
+		'id' => $shortname."_linkpage",
+		'std' => 'one',
+		'type' => 'select',
+		'options' => $linkpage_array
+	);
+	
+	$options[] = array(
+		'name' => __( 'Gravatar头像替换源', 'theme-textdomain' ),
+		'desc' => __( '解决Gravatar无法展示的问题，默认使用Cravatar', 'theme-textdomain' ),
+		'id' => $shortname."_gravatar",
+		'std' => 'one',
+		'type' => 'select',
+		'options' => $gravatar_array
+	);
+	
+	$options[] = array(
 		'name' => __( '是否开启代码高亮功能(Prism.js)', 'theme-textdomain' ),
 		'desc' => __( '默认关闭', 'theme-textdomain' ),
 		'id' => $shortname."_prismjs",
@@ -182,24 +228,6 @@ function optionsframework_options() {
 		'desc' => __( '填写完整链接地址，请包含http或者https', 'theme-textdomain' ),
 		'id' => $shortname."_touchingurl",
 		'std' => '',
-		'type' => 'text'
-	);
-	
-	$options[] = array(
-		'name' => __( '首页展示某分类友链', 'theme-textdomain' ),
-		'desc' => __( '如果友链有分类，可以在首页展示某分类的友链，填写分类ID，全展示则不需要修改', 'theme-textdomain' ),
-		'id' => $shortname."_linkid",
-		'std' => '0',
-		'class' => 'mini',
-		'type' => 'text'
-	);
-	
-	$options[] = array(
-		'name' => __( '侧边栏热门日志天数范围', 'theme-textdomain' ),
-		'desc' => __( '默认选择最近365天的文章，可以根据文章发布频次自行调整选择的天数范围', 'theme-textdomain' ),
-		'id' => $shortname."_hotpostno",
-		'std' => '365',
-		'class' => 'mini',
 		'type' => 'text'
 	);
 

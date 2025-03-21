@@ -1,6 +1,6 @@
 <?php
 /*
-Template Name: Archives
+Template Name: 文章归档
 */
 ?>
 <?php get_header(); ?>

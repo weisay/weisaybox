@@ -176,8 +176,8 @@ jQuery('#Get_Gravatar').fadeOut().html('看看右边头像对不对？').fadeIn(
 	<?php } else { include('includes/smilies.php'); } ?>
 	<textarea name="comment" id="comment" placeholder="互动可以先从评论开始…" tabindex="4" cols="50" rows="5"></textarea>
 	<p class="form-submit">
-		<input class="submit" name="submit" type="submit" id="submit" tabindex="5" value="提交留言" />
-		<input class="reset" name="reset" type="reset" id="reset" tabindex="6" value="<?php esc_attr_e( '重写' ); ?>" />
+		<input id="submit" class="submit" name="submit" type="submit" tabindex="5" value="提交留言" />
+		<input id="reset" class="reset" name="reset" type="reset" tabindex="6" value="<?php esc_attr_e( '重写' ); ?>" />
 		<?php comment_id_fields(); ?>
 	</p>
 	<script type="text/javascript">	//Crel+Enter

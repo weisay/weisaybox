@@ -1,6 +1,6 @@
 <?php
 /*
-Template Name: Guestbook
+Template Name: 留言页面
 */
 ?>
 <?php get_header(); ?>

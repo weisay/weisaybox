@@ -1,6 +1,6 @@
 <?php
 /*
-Template Name: Touching
+Template Name: 走心评论
 */
 ?>
 <?php get_header(); ?>

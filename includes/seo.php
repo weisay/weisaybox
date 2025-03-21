@@ -17,7 +17,10 @@ if ( is_single() ){
 	if($post->post_excerpt){
 	$description = $post->post_excerpt;
 	}else{
-	$description = mb_strimwidth(strip_tags(apply_filters('the_content',$post->post_content)),0,200);
+	$pc=$post->post_content;
+	$st=strip_tags(apply_filters('the_content',$pc));
+	$pr=preg_replace("/\s+/",'',$st);
+	$description = mb_strimwidth($pr,0,240);
 	}
 	$tags = wp_get_post_tags($post->ID);
 	foreach ($tags as $tag ) {

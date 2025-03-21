@@ -5,7 +5,7 @@
 	Author: Weisay
 	Author URI: https://www.weisay.com
 	Tags: 响应式,两栏,经典,设置简单,特色图片,小工具,自定义菜单,走心评论,ajax评论,威言威语
-	Version: 5.0.7
+	Version: 5.0.8
 */
 *{border:0;margin:0;padding:0;}
 @media screen and (max-width:319px){
@@ -56,7 +56,9 @@ input:focus, textarea:focus{outline:1px solid #ddd;}
 .diagram, .attachment-thumbnail{width:7rem;height:5rem;}
 .main .type-post li .article h2.entry-title{display:block;line-height:1.66667rem;margin-bottom:0.83333rem;font-size:1.22222rem;font-weight:normal;}
 .main .type-post li .article h2.entry-title a{color:#222;}
-.main .entry-summary p{display:block;line-height:1.66666rem;height:5rem;overflow:hidden;font-size:1rem;color:#666;}
+.main .entry-summary{height:5rem;overflow:hidden;}
+.main .entry-summary p{line-height:1.66666rem;font-size:1rem;color:#666;}
+.main .entry-summary img{width:auto;max-width:100%;height:auto;}
 .main .info{margin-top:0.5rem;color:#999;font-size: 0.875rem;}
 .main .info .comments{float:right;}
 #map{font-size:1rem;color:#666;line-height:1.75rem;padding:0.27778rem 0.83333rem;background:#eee;margin-top:0.825rem;}
@@ -328,7 +330,7 @@ i.stickys{background:url(images/top.gif) no-repeat;display:inline-block;height:1
 .thumbnail{float:left;width:10.99rem;height:7.85rem;margin:-5px 15px 2px 15px;padding:4px;border:1px solid #ccc;}
 .thumbnail img{position:absolute;z-index:3;}
 .diagram, .attachment-thumbnail{width:10.99rem;height:7.85rem;}
-.main .entry-summary{line-height:2rem;margin:-5px 15px 0 0;}
+.main .entry-summary{line-height:2rem;margin:-5px 15px 0 15px;}
 .main .entry-content{position:relative;overflow:hidden;padding:10px 15px;}
 .main .entry-content p{padding:5px 0;line-height:2rem;text-indent:2em;}
 .main .entry-content h1, .main .entry-content h2, .main .entry-content h3, .main .entry-content h4, .main .entry-content h5, .main .entry-content h6{font-weight:bold;width:auto;display:inline;box-shadow:inset 0 -8px 0 0 #ceebfb;}
@@ -510,6 +512,8 @@ select#archive-selector{font-size:0.875rem;border:1px #ccc solid;width:6rem;heig
 .links-box .links-item a{line-height:1.75rem;height:1.75rem;}
 .links-box .links-item img{width:1.75rem;height:1.75rem;margin-right:4px;vertical-align:top;border-radius:4px;}
 .links-box .links-item a span{font-size:1rem;margin-bottom:5px;display:block;line-height:1.75rem;height:1.75rem;overflow:hidden;}
+.links-base ul{grid-template-columns:repeat(4, 1fr);}
+.links-base ul li{height:1.75rem;}
 /* 侧边栏 */
 #sidebar{float:right;width:300px;}
 #sidebar li ul{}

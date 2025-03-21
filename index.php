@@ -30,7 +30,7 @@
 	$st=strip_tags(apply_filters('the_content',$pc));
 	if(has_excerpt())
 		the_excerpt();
-	elseif(preg_match('/<!--more.*?-->/',$pc) || mb_strwidth($st)<300)
+	elseif(preg_match('/<!--more.*?-->/',$pc))
 		the_content('');
 	elseif(function_exists('mb_strimwidth'))
 		echo'<p>'

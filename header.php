@@ -49,13 +49,17 @@
 <?php include('menu.php'); ?>
 <div class="mainmenu">
 <div id="nav" class="topnav"><?php wp_nav_menu( array( 'theme_location' => 'headermenu' ) ); ?></div>
+<?php if (weisay_option('wei_search') == 'hide') { ?>
+<?php { echo ''; } ?>
+<?php } else { ?>
 <div class="search">
 <div class="search_site">
 <form id="searchform" method="get" action="<?php bloginfo('url'); ?>/">
 <input type="submit" value="" id="searchsubmit" class="button" />
-<input type="text" id="s" name="s" value="Search" />
+<input type="text" required="" id="s" name="s" value="" placeholder="搜索"/>
 </form>
 </div></div>
+<?php } ?>
 <div class="clear"></div>
 </div>
 </div>
