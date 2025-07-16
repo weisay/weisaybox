@@ -21,7 +21,7 @@
 <?php the_tags('<div class="article-tags"><span>', ' ', '</span></div><div class="clear"></div>'); ?>
 </div>
 </div>
-<?php if (weisay_option('wei_reward') == 'display') { ?>
+<?php if (weisay_option('wei_reward') == 'display') : ?>
 <div class="article article_c article-shang">
 	<div class="shang">
 		<span class="zanzhu"><a title="赞助本站" href="javascript:;" onfocus="this.blur()">赏</a></span>
@@ -37,7 +37,7 @@
 	<p class="shang-tips">扫描二维码，打赏一下作者吧~</p>
 	</div>
 </div>
-<?php { echo ''; } ?><?php } else { } ?>
+<?php endif; ?>
 <div class="article article_c">
 <ul class="pre_nex"><li>
 <?php previous_post_link('【上一篇】%link') ?></li><li><?php next_post_link('【下一篇】%link') ?></li>

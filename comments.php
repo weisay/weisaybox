@@ -70,8 +70,8 @@ jQuery(document).ready(function comment_page_ajas(){
 jQuery(document).ready(function() {
 var gravatarurl= 'https://weavatar.com/avatar/';
 jQuery('#email').blur(function() {
-jQuery('#real-avatar .avatar').attr('src', gravatarurl + hex_md5(jQuery('#email').val()) + '?s=50&d=mm&r=g');
-jQuery('#real-avatar .avatar').attr('srcset', gravatarurl + hex_md5(jQuery('#email').val()) + '?s=100&d=mm&r=g 2x');
+jQuery('#real-avatar .avatar').attr('src', gravatarurl + sha256(jQuery('#email').val()) + '?s=50&d=mm&r=g');
+jQuery('#real-avatar .avatar').attr('srcset', gravatarurl + sha256(jQuery('#email').val()) + '?s=100&d=mm&r=g 2x');
 jQuery('#Get_Gravatar').fadeOut().html('看看右边头像对不对？').fadeIn('slow');
 });
 });
@@ -83,8 +83,8 @@ jQuery('#Get_Gravatar').fadeOut().html('看看右边头像对不对？').fadeIn(
 jQuery(document).ready(function() {
 var gravatarurl= 'https://gravatar.loli.net/avatar/';
 jQuery('#email').blur(function() {
-jQuery('#real-avatar .avatar').attr('src', gravatarurl + hex_md5(jQuery('#email').val()) + '?s=50&d=mm&r=g');
-jQuery('#real-avatar .avatar').attr('srcset', gravatarurl + hex_md5(jQuery('#email').val()) + '?s=100&d=mm&r=g 2x');
+jQuery('#real-avatar .avatar').attr('src', gravatarurl + sha256(jQuery('#email').val()) + '?s=50&d=mm&r=g');
+jQuery('#real-avatar .avatar').attr('srcset', gravatarurl + sha256(jQuery('#email').val()) + '?s=100&d=mm&r=g 2x');
 jQuery('#Get_Gravatar').fadeOut().html('看看右边头像对不对？').fadeIn('slow');
 });
 });
@@ -96,8 +96,8 @@ jQuery('#Get_Gravatar').fadeOut().html('看看右边头像对不对？').fadeIn(
 jQuery(document).ready(function() {
 var gravatarurl= 'https://cdn.sep.cc/avatar/';
 jQuery('#email').blur(function() {
-jQuery('#real-avatar .avatar').attr('src', gravatarurl + hex_md5(jQuery('#email').val()) + '?s=50&d=mm&r=g');
-jQuery('#real-avatar .avatar').attr('srcset', gravatarurl + hex_md5(jQuery('#email').val()) + '?s=100&d=mm&r=g 2x');
+jQuery('#real-avatar .avatar').attr('src', gravatarurl + sha256(jQuery('#email').val()) + '?s=50&d=mm&r=g');
+jQuery('#real-avatar .avatar').attr('srcset', gravatarurl + sha256(jQuery('#email').val()) + '?s=100&d=mm&r=g 2x');
 jQuery('#Get_Gravatar').fadeOut().html('看看右边头像对不对？').fadeIn('slow');
 });
 });
@@ -109,8 +109,8 @@ jQuery('#Get_Gravatar').fadeOut().html('看看右边头像对不对？').fadeIn(
 jQuery(document).ready(function() {
 var gravatarurl= 'https://cravatar.cn/avatar/';
 jQuery('#email').blur(function() {
-jQuery('#real-avatar .avatar').attr('src', gravatarurl + hex_md5(jQuery('#email').val()) + '?s=50&d=mm&r=g');
-jQuery('#real-avatar .avatar').attr('srcset', gravatarurl + hex_md5(jQuery('#email').val()) + '?s=100&d=mm&r=g 2x');
+jQuery('#real-avatar .avatar').attr('src', gravatarurl + sha256(jQuery('#email').val()) + '?s=50&d=mm&r=g');
+jQuery('#real-avatar .avatar').attr('srcset', gravatarurl + sha256(jQuery('#email').val()) + '?s=100&d=mm&r=g 2x');
 jQuery('#Get_Gravatar').fadeOut().html('看看右边头像对不对？').fadeIn('slow');
 });
 });
@@ -150,9 +150,9 @@ jQuery('#Get_Gravatar').fadeOut().html('看看右边头像对不对？').fadeIn(
 		<?php $current_user = wp_get_current_user(); echo get_avatar( $current_user->user_email, 50, '', $current_user->display_name ); ?>
 	<?php elseif(isset($_COOKIE['comment_author_email_'.COOKIEHASH])) : ?>
 		<?php echo get_avatar( $comment_author_email, 50, '', 'gravatar' );?>
-	<?php else :?>
+	<?php else: ?>
 		<?php global $user_email;?><?php echo get_avatar( $user_email, 50, '', 'gravatar' ); ?>
-	<?php endif;?>
+	<?php endif; ?>
 	</div>
 	<?php if ( !is_user_logged_in() ) : ?>
 	<div id="comment-author-info">
@@ -161,19 +161,21 @@ jQuery('#Get_Gravatar').fadeOut().html('看看右边头像对不对？').fadeIn(
 			<label for="author">昵称<?php if ($req) echo "<span class='required'> *</span>"; ?></label>
 		</p>
 		<p>
-			<input type="text" name="email" id="email" class="commenttext" value="<?php echo $comment_author_email; ?>" size="22" tabindex="2" />
+			<input type="email" name="email" id="email" class="commenttext" value="<?php echo $comment_author_email; ?>" size="22" tabindex="2" />
 			<label for="email">邮箱<?php if ($req) echo "<span class='required'> *</span>"; ?> <a id="Get_Gravatar"  title="查看如何申请一个自己的Gravatar全球通用头像" target="_blank" href="https://www.weisay.com/blog/apply-gravatar.html">（教你设置自己的个性头像）</a></label>
 		</p>
 		<p>
-			<input type="text" name="url" id="url" class="commenttext" value="<?php echo $comment_author_url; ?>" size="22" tabindex="3" />
+			<input type="url" name="url" id="url" class="commenttext" value="<?php echo $comment_author_url; ?>" size="22" tabindex="3" />
 			<label for="url">网址</label>
 		</p>
 	</div>
 	<?php endif; ?>
 	<div class="clear"></div>
-	<?php if (weisay_option('wei_smilies') == 'hide') { ?>
-	<?php { echo ''; } ?>
-	<?php } else { include('includes/smilies.php'); } ?>
+	<?php 
+	if (weisay_option('wei_smilies') != 'hide') {
+		include('includes/smilies.php');
+	}
+	?>
 	<textarea name="comment" id="comment" placeholder="互动可以先从评论开始…" tabindex="4" cols="50" rows="5"></textarea>
 	<p class="form-submit">
 		<input id="submit" class="submit" name="submit" type="submit" tabindex="5" value="提交留言" />

@@ -24,9 +24,9 @@
 <div id="head">
 <div id="header">
 <div class="subpage">
-<?php if (weisay_option('wei_toppage') == 'hide') { ?>
-<?php { echo ''; } ?>
-<?php } else { ?><div class="toppage"><?php wp_nav_menu( array( 'theme_location' => 'topmenu' ) ); ?></div><?php } ?>
+<?php if (weisay_option('wei_toppage') != 'hide') : ?>
+	<div class="toppage"><?php wp_nav_menu(array('theme_location' => 'topmenu')); ?></div>
+<?php endif; ?>
 <div id="rss"><ul>
 <li class="rssfeed"><a href="<?php bloginfo('rss2_url'); ?>" target="_blank" class="rssicon" title="欢迎订阅<?php bloginfo('name'); ?>"></a></li>
 </ul></div>
@@ -49,9 +49,7 @@
 <?php include('menu.php'); ?>
 <div class="mainmenu">
 <div id="nav" class="topnav"><?php wp_nav_menu( array( 'theme_location' => 'headermenu' ) ); ?></div>
-<?php if (weisay_option('wei_search') == 'hide') { ?>
-<?php { echo ''; } ?>
-<?php } else { ?>
+<?php if (weisay_option('wei_search') != 'hide') : ?>
 <div class="search">
 <div class="search_site">
 <form id="searchform" method="get" action="<?php bloginfo('url'); ?>/">
@@ -59,7 +57,7 @@
 <input type="text" required="" id="s" name="s" value="" placeholder="搜索"/>
 </form>
 </div></div>
-<?php } ?>
+<?php endif; ?>
 <div class="clear"></div>
 </div>
 </div>

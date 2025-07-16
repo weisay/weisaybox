@@ -5,7 +5,7 @@
 	Author: Weisay
 	Author URI: https://www.weisay.com
 	Tags: 响应式,两栏,经典,设置简单,特色图片,小工具,自定义菜单,走心评论,ajax评论,威言威语
-	Version: 5.0.8
+	Version: 5.0.9
 */
 *{border:0;margin:0;padding:0;}
 @media screen and (max-width:319px){
@@ -329,7 +329,7 @@ i.stickys{background:url(images/top.gif) no-repeat;display:inline-block;height:1
 .main .article p.comments-closed{padding:1.25rem 0;text-align:center;font-size:1.125rem;}
 .thumbnail{float:left;width:10.99rem;height:7.85rem;margin:-5px 15px 2px 15px;padding:4px;border:1px solid #ccc;}
 .thumbnail img{position:absolute;z-index:3;}
-.diagram, .attachment-thumbnail{width:10.99rem;height:7.85rem;}
+.diagram, .attachment-thumbnail{width:10.99rem;height:7.85rem;object-fit:cover;}
 .main .entry-summary{line-height:2rem;margin:-5px 15px 0 15px;}
 .main .entry-content{position:relative;overflow:hidden;padding:10px 15px;}
 .main .entry-content p{padding:5px 0;line-height:2rem;text-indent:2em;}
@@ -391,14 +391,17 @@ i.stickys{background:url(images/top.gif) no-repeat;display:inline-block;height:1
 .read-more-icon span{background:url(images/arrow8.gif) no-repeat scroll center center #444;}
 .read-more-icon:hover span{background:url(images/arrow8.gif) no-repeat scroll center center #222;}
 /* 图文混排 */
-img.size-auto,img.size-full,img.size-large,img.size-medium,.attachment img,.widget-container img{max-width:100%;height:auto;}
+.article .entry-content img{max-width:100%;height:auto;}
 .alignleft,img.alignleft{display:inline;float:left;margin-right:15px;margin-top:5px;}
 .alignright,img.alignright{display:inline;float:right;margin-left:15px;margin-top:5px;}
-.aligncenter,img.aligncenter,.alignnone,img.alignnone{clear:both;display:block;margin-left:auto;margin-right:auto;}
+.aligncenter,img.aligncenter{clear:both;display:block;margin-left:auto;margin-right:auto;}
+.alignnone,img.alignnone{margin-top:5px;}
 img.alignleft,img.alignright,img.aligncenter,img.alignnone{margin-bottom:5px;}
-.article .entry-content img{width:auto;max-width:100%;height:auto;}
+.article .entry-content .wp-caption{max-width:100%;}
 .article .entry-content p:has(img){text-indent:0;}
-.wp-block-image.aligncenter>figcaption, .wp-block-image .aligncenter>figcaption, .wp-block-image.alignleft>figcaption, .wp-block-image .alignleft>figcaption, .wp-block-image.alignright>figcaption, .wp-block-image .alignright>figcaption{text-align:center;}
+figure.wp-block-image{width:fit-content;}
+.wp-block-gallery{margin-top:8px !important;}
+.wp-block-image figcaption,.wp-block-gallery figcaption,.article .entry-content p.wp-caption-text{text-align:center;font-size:14px;color:#777;padding:0 0 8px 0;}
 /* 分页 */
 .pagination{font-size:0.875rem;margin-top:15px;float:right;}
 .article .pagination{font-size:0.875rem;float:right;margin:5px 5px 5px 5px;}

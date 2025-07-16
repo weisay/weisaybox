@@ -15,7 +15,7 @@
 	<div class="searchBar">
 		<form id="searchform" method="get" action="<?php bloginfo('url'); ?>/">
 		<div class="boxInput">
-			<input type="text" value="<?php the_search_query(); ?>" name="s" id="s" class="inputTxt">
+			<input type="text" required="" name="s" id="s" value="" class="inputTxt" placeholder="搜索">
 		</div>
 		<button type="submit" class="schBtn">搜索</button>
 	</form>

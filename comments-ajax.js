@@ -167,13 +167,13 @@ function exit_prev_edit() {
 		edit = '';
 }
 
-var wait = 12, submit_val = $submit.val();
+var wait = 15, submit_val = $submit.val();
 function countdown() {
 	if ( wait > 0 ) {
 		$submit.val(wait); wait--; setTimeout(countdown, 1000);
 	} else {
 		$submit.val(submit_val).attr('disabled', false).fadeTo('slow', 1);
-		wait = 12;
+		wait = 15;
 	}
 }
 });// end jQ

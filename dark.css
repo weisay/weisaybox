@@ -51,6 +51,7 @@
 .dark .main .entry-content .titlebar{background:linear-gradient(to right, #182934,#273944);border-left:4px #1b5070 solid;box-shadow:none;}
 .dark .main .entry-content ol li{background-color:#2a2a2a;}
 .dark .main .entry-content ul li{background-color:#2a2a2a;}
+.dark .main .entry-summary p{color:#aaa;}
 .dark .main .entry-content p textarea{border:1px #444 solid;}
 .dark .main .entry-content p code{background-color:#333;color:#719ebe;}
 .dark .main .entry-content blockquote{padding:10px 15px;background-color:#333;border-left:8px #444 solid;}
@@ -61,6 +62,7 @@
 .dark .main .entry-content label input{background:#444;}
 .dark .main .entry-content .article-tags a{background:#444;color:#ccc;}
 .dark .main .entry-content .article-tags a:hover{background:#0088dd;color:#eee;}
+.dark .wp-block-image figcaption,.dark .wp-block-gallery figcaption,.dark .article .entry-content p.wp-caption-text{color:#999;}
 .dark .main .article_info{border-bottom:1px #555 dotted;color:#999}
 .dark .main .info .updated,.dark .main .article_info .updated{background:url(images/ico_dark.png) no-repeat 0px -2px;}
 .dark .main .info .category,.dark .main .article_info .category{background:url(images/ico_dark.png) no-repeat 0px -22px;}

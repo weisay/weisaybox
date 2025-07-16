@@ -16,7 +16,7 @@ Template Name: 文章归档
 <div class="article article_c">
 <h2 class="entry-title">文章归档</h2>
 <p class="articles_all"><strong><?php bloginfo('name'); ?></strong> 目前共有 <?php echo intval(wp_count_posts()->publish); ?>篇文章，<?php $comment_count = $wpdb->get_var("SELECT COUNT(*) FROM $wpdb->comments WHERE comment_approved = '1'"); echo $comment_count; ?>条评论。</p>
-<?php echo $hacklog_archives->PostList();?>
+<?php global $article_archive; echo $article_archive->post_list(); ?>
 </div>
 </div>
 <?php get_sidebar(); ?>

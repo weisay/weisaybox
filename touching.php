@@ -17,9 +17,8 @@ Template Name: 走心评论
 	<div id="comments" class="comments-area">
 	<h3 class="subtitle">目前已入选 <?php
 		global $wpdb;
-		$counts = $wpdb->get_results("SELECT * FROM $wpdb->comments WHERE comment_karma = '1' and comment_approved = '1'");
-		$karmamun = count($counts);
-		echo $karmamun;
+		$karmamun = $wpdb->get_var("SELECT COUNT(*) FROM $wpdb->comments WHERE comment_karma = '1' AND comment_approved = '1'");
+		echo number_format_i18n($karmamun);
 		?> 条走心评论</h3>
 	<div id="pagetext">
 		<ol class="comment-list touching-comments-list">

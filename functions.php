@@ -50,9 +50,11 @@ if ( function_exists('register_nav_menus') ) {
 
 if ( ! function_exists( 'weisaybox_styles' ) ) {
 	function weisaybox_styles() {
-		wp_enqueue_style( 'weisaybox-mmenu', get_template_directory_uri().'/mmenu.css','','5.0.8','all' );
-		wp_enqueue_style( 'weisaybox-style', get_stylesheet_uri(),'','5.0.8','all' );
-		wp_enqueue_style( 'weisaybox-dark', get_template_directory_uri().'/dark.css','','5.0.8','all' );
+		$theme = wp_get_theme();
+		$themeversion = $theme->get('Version');
+		wp_enqueue_style( 'weisaybox-mmenu', get_template_directory_uri().'/mmenu.css','',$themeversion,'all' );
+		wp_enqueue_style( 'weisaybox-style', get_stylesheet_uri(),'',$themeversion,'all' );
+		wp_enqueue_style( 'weisaybox-dark', get_template_directory_uri().'/dark.css','',$themeversion,'all' );
 	}
 }
 add_action( 'wp_enqueue_scripts', 'weisaybox_styles', '1' );
@@ -223,12 +225,12 @@ function paging_nav(){
 }
 
 //日志归档
-	class hacklog_archives
+	class article_archive
 {
-	function GetPosts() 
+	function get_posts() 
 	{
 		global  $wpdb,$rawposts;
-		if ( $posts = wp_cache_get( 'posts', 'ihacklog-clean-archives' ) )
+		if ( $posts = wp_cache_get( 'posts', 'iarticle-clean-archive' ) )
 			return $posts;
 		$query="SELECT DISTINCT ID,post_date,post_date_gmt,comment_count,post_password FROM $wpdb->posts WHERE post_type='post' AND post_status = 'publish'";
 		$rawposts =$wpdb->get_results( $query, OBJECT );
@@ -240,22 +242,22 @@ function paging_nav(){
 			$rawposts[$key] = null; 
 		}
 		$rawposts = null;
-		wp_cache_set( 'posts', $posts, 'ihacklog-clean-archives' );
+		wp_cache_set( 'posts', $posts, 'iarticle-clean-archive' );
 		return $posts;
 	}
-	function PostList( $atts = array() ) 
+	function post_list( $atts = array() )
 	{
 		global $wp_locale;
-		global $hacklog_clean_archives_config;
+		global $article_clean_archive_config;
 		$atts = shortcode_atts(array(
-			'usejs'        => $hacklog_clean_archives_config['usejs'],
-			'monthorder'   => $hacklog_clean_archives_config['monthorder'],
-			'postorder'    => $hacklog_clean_archives_config['postorder'],
-			'postcount'    => '1',
+			'usejs' => $article_clean_archive_config['usejs'],
+			'monthorder' => $article_clean_archive_config['monthorder'],
+			'postorder' => $article_clean_archive_config['postorder'],
+			'postcount' => '1',
 			'commentcount' => '1',
 		), $atts);
 		$atts=array_merge(array('usejs' => 1, 'monthorder' => 'new', 'postorder' => 'new'),$atts);
-		$posts = $this->GetPosts();
+		$posts = $this->get_posts();
 		( 'new' == $atts['monthorder'] ) ? krsort( $posts ) : ksort( $posts );
 		foreach( $posts as $key => $month ) {
 			$sorter = array();
@@ -271,25 +273,25 @@ function paging_nav(){
 		$html .= '">'. "\n";
 		if ( 1 == $atts['usejs'] ) $html .= '<select id="archive-selector"></select><a href="#" class="car-toggler">展开所有月份'."</a>\n";
 		$html .= '<ul class="car-list">' . "\n";
-		$firstmonth = TRUE;
+		$first_month = TRUE;
 		foreach( $posts as $yearmonth => $posts ) {
 			list( $year, $month ) = explode( '.', $yearmonth );
-			$firstpost = TRUE;
+			$first_post = TRUE;
 			foreach( $posts as $post ) {
-				if ( TRUE == $firstpost ) {
-					$spchar = $firstmonth ? '<span class="car-toggle-icon car-minus">-</span>' : '<span class="car-toggle-icon car-plus">+</span>';
+				if ( TRUE == $first_post ) {
+					$spchar = $first_month ? '<span class="car-toggle-icon car-minus">-</span>' : '<span class="car-toggle-icon car-plus">+</span>';
 					$html .= '<li class="car-pubyear-'. $year .'"><span class="car-yearmonth" style="cursor:pointer;">'.$spchar.' ' . sprintf( __('%1$s %2$d'), $wp_locale->get_month($month), $year );
 					if ( '0' != $atts['postcount'] ) 
 					{
 						$html .= '<span class="archive-count">(共' . count($posts) . '篇文章)</span>';
 					}
-					if ($firstmonth == FALSE) {
+					if ($first_month == FALSE) {
 					$html .= "</span>\n<ul class='car-monthlisting' style='display:none;'>\n";
 					} else {
 					$html .= "</span>\n<ul class='car-monthlisting'>\n";
 					}
-					$firstpost = FALSE;
-					$firstmonth = FALSE;
+					$first_post = FALSE;
+					$first_month = FALSE;
 				}
 				$html .= '<li>' . mysql2date( 'd', $post->post_date ) . '日: <a target="_blank" href="' . get_permalink( $post->ID ) . '">' . get_the_title( $post->ID ) . '</a>';
 				if ( !empty($post->post_password) )
@@ -310,7 +312,7 @@ function paging_nav(){
 		$html .= "</ul>\n</div>\n";
 		return $html;
 	}
-	function PostCount() 
+	function post_count() 
 	{
 		$num_posts = wp_count_posts( 'post' );
 		return number_format_i18n( $num_posts->publish );
@@ -318,38 +320,33 @@ function paging_nav(){
 }
 if(!empty($post->post_content))
 {
-	$all_config=explode(';',$post->post_content);
+	$all_config = explode(';',$post->post_content);
 	foreach($all_config as $item)
 	{
-		$temp=explode('=',$item);
-		$hacklog_clean_archives_config[trim($temp[0])]=htmlspecialchars(strip_tags(trim($temp[1])));
+		$temp = explode('=',$item);
+		$article_clean_archive_config[trim($temp[0])] = htmlspecialchars(strip_tags(trim($temp[1])));
 	}
 }
 else
 {
-	$hacklog_clean_archives_config=array('usejs' => 1, 'monthorder' => 'new', 'postorder' => 'new');
+	$article_clean_archive_config = array('usejs' => 1, 'monthorder' => 'new', 'postorder' => 'new');
 }
-$hacklog_archives=new hacklog_archives();
+$article_archive = new article_archive();
 
 //支持外链缩略图
 if ( function_exists('add_theme_support') )
-add_theme_support('post-thumbnails');
-function catch_first_image() {
-	global $post, $posts;
-	$first_img = '';
-	ob_start();
-	ob_end_clean();
-	$output = preg_match_all('/<img.+src=[\'"]([^\'"]+)[\'"].*>/i', $post->post_content, $matches);
-	if(isset($matches [1] [0])){
-	$first_img = $matches [1] [0];
-	}
-	if(empty($first_img)){
-		$random = mt_rand(1, 30);
-		echo get_bloginfo ( 'stylesheet_directory' );
-		echo '/images/random/'.$random.'.jpg';
-	}
+	add_theme_support('post-thumbnails');
+	function catch_first_image() {
+		global $post, $posts;
+		$first_img = '';
+		ob_start();
+		ob_end_clean();
+		$output = preg_match_all('/<img.+src=[\'"]([^\'"]+)[\'"].*>/i', $post->post_content, $matches);
+		if(isset($matches [1] [0])){
+		$first_img = $matches [1] [0];
+		}
 	return $first_img;
-}
+	}
 
 //评论
 function weisay_comment($comment, $args, $depth) {
@@ -403,8 +400,7 @@ function weisay_comment($comment, $args, $depth) {
 		echo $replyButton;
 		?>
 		</span>
-	<?php if ( (weisay_option('wei_touching') == 'displays') && current_user_can('level_10') ) {//走心评论按钮
-	?>
+	<?php if (weisay_option('wei_touching') == 'displays' && current_user_can('manage_options')) : ?>
 	<span class="touching-comments-button"><a class="karma-link" data-karma="<?php echo $comment->comment_karma; ?>" href="<?php echo wp_nonce_url( site_url('/comment-karma'), 'KARMA_NONCE' ); ?>" onclick="return post_karma(<?php comment_ID(); ?>, this.href, this)">
 		<?php if ($comment->comment_karma == 0) {
 		echo '<span title="加入走心"><svg t="1691142362631" class="icon" viewBox="0 0 1024 1024" version="1.1" xmlns="http://www.w3.org/2000/svg" p-id="3461" ><path d="M709.56577067 110.4732032c-96.8271424 0-166.18710933 87.25008853-196.0785664 133.39655893-29.9242016-46.1464704-99.2525152-133.39655893-196.07747414-133.39655893-138.9415136 0-251.94071467 125.20683413-251.94071466 279.09134827 0 71.95780053 48.8076128 175.11579733 108.0556768 229.1037952 81.95836693 105.30066347 312.36872 294.85954133 340.81281173 294.85954133 28.94728533 0 254.41302293-185.87497493 337.85259093-293.59773653 60.28719787-54.93435093 109.33167147-158.2342464 109.33167147-230.3656C961.52176747 235.6789472 848.50401067 110.4732032 709.56577067 110.4732032M902.11434027 389.56455147c0 57.54855787-41.73561173 143.42877973-91.125008 187.5253632-1.35349333 1.2301504-2.58255147 2.58364373-3.81161067 4.06593706-73.42262933 95.66248427-221.2448032 214.31688427-292.6830368 266.2877408C461.38864 808.5743296 301.43851307 687.4618112 219.3229664 580.77818347c-1.1024416-1.44954773-2.39371733-2.80522347-3.74721067-4.06593707-49.2027456-44.03436693-90.71568533-129.69410027-90.71568533-187.14769493 0-121.14308053 86.3670432-219.71666667 192.5496608-219.71666667 68.4452672 0 134.3407296 74.08409387 169.27394667 147.5383776 4.6291648 9.7331424 14.8982464 15.7954816 26.80461866 15.7954816s22.17436267-6.0634304 26.83518187-15.7954816c34.90156373-73.45428373 100.76427947-147.5383776 169.24338453-147.5383776C815.7451136 169.8478848 902.11434027 268.42147093 902.11434027 389.56455147" fill="#d81e06" p-id="3462"></path></svg></span>';
@@ -412,9 +408,7 @@ function weisay_comment($comment, $args, $depth) {
 		echo '<span title="取消走心"><svg t="1691141971354" class="icon" viewBox="0 0 1024 1024" version="1.1" xmlns="http://www.w3.org/2000/svg" p-id="3103"><path d="M709.56577067 110.4732032c-96.8271424 0-166.18710933 87.25008853-196.0785664 133.39655893-29.9242016-46.1464704-99.2525152-133.39655893-196.07747414-133.39655893-138.9415136 0-251.94071467 125.20683413-251.94071466 279.09134827 0 71.95780053 48.8076128 175.11579733 108.0556768 229.1037952 81.95836693 105.30066347 312.36872 294.85954133 340.81281173 294.85954133 28.94728533 0 254.41302293-185.87497493 337.85259093-293.59773653 60.28719787-54.93435093 109.33167147-158.2342464 109.33167147-230.3656C961.52176747 235.6789472 848.50401067 110.4732032 709.56577067 110.4732032" fill="#d81e06" p-id="3104"></path></svg></span>';
 		}
 	?></a></span>
-	<?php
-	}
-	?>
+	<?php endif; ?>
 		</div>
 	<div class="clear"></div>
 </div>
@@ -474,7 +468,7 @@ function weisay_touching_comments_karma_request() {
 		'message'=> 'Login required.'
 	);
 
-	if (!is_user_logged_in() || !current_user_can('level_10')) {
+	if (!is_user_logged_in() || !current_user_can('manage_options')) {
 		// 未认证的用户拒绝继续执行请求
 		header("HTTP/1.1 403 Forbidden");
 		die(json_encode($result));
