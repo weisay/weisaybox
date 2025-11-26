@@ -220,7 +220,7 @@ function optionsframework_options() {
 	
 	$options[] = array(
 		'name' => __( 'Gravatar头像替换源', 'theme-textdomain' ),
-		'desc' => __( '解决Gravatar无法展示的问题，默认使用Cravatar', 'theme-textdomain' ),
+		'desc' => __( '解决Gravatar无法展示的问题，默认使用Weavatar', 'theme-textdomain' ),
 		'id' => $shortname."_gravatar",
 		'std' => '1',
 		'type' => 'select',
