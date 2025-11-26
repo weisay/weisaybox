@@ -12,6 +12,17 @@ Template Name: 友情链接
 <div id="map">
 <div class="site">当前位置： <a title="返回首页" href="<?php bloginfo('url'); ?>/">首页</a> &gt; <?php the_title(); ?></div>
 </div>
+
+<?php
+$content = trim(get_the_content());
+if (!empty($content)) : ?>
+<div class="article article_c">
+<div class="link-content">
+<?php the_content('Read more...'); ?>
+</div>
+</div>
+<?php endif; ?>
+
 <div class="article article_c">
 <?php if (weisay_option('wei_linkpage') == 'two') : ?>
 <div class="links-box links-base">

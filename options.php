@@ -1,6 +1,30 @@
 <?php
 function optionsframework_option_name() {
-	return 'weisaybox-theme';
+	return 'weisaybox';
+}
+
+// 读取changelog.txt 更新日志文件
+function get_changelog_content() {
+	$changelog_file = get_template_directory() . '/changelog.txt';
+	if (!file_exists($changelog_file)) return '<div class="update-item"><p>暂无更新日志</p></div>';
+	$lines = file($changelog_file, FILE_IGNORE_NEW_LINES | FILE_SKIP_EMPTY_LINES);
+	$changelog_html = '';
+	$current_version = '';
+	foreach ($lines as $line) {
+		$line = trim($line);
+		if (empty($line)) continue;
+		if (strpos($line, "\t\t") !== false) {
+			if (!empty($current_version)) $changelog_html .= '</ol></div>';
+			list($version, $date) = explode("\t\t", $line, 2);
+			$changelog_html .= '<div class="update-item"><h4 class="heading">版本 ' 
+				. esc_html(trim($version)) . '<span class="update-date">' 
+				. esc_html(trim($date)) . '</span></h4><ol class="changelog">';
+			$current_version = $version;
+		} else {
+			$changelog_html .= '<li>' . esc_html($line) . '</li>';
+		}
+	}
+	return !empty($current_version) ? $changelog_html . '</ol></div>' : '<div class="update-item"><p>暂无更新日志</p></div>';
 }
 
 function optionsframework_options() {
@@ -14,24 +38,6 @@ function optionsframework_options() {
 	$whether_arrays = array(
 		'hides' => __( '关闭', 'theme-textdomain' ),
 		'displays' => __( '开启', 'theme-textdomain' )
-	);
-	
-	$thumbnail_array = array(
-		'one' => __( '随机缩略图', 'theme-textdomain' ),
-		'two' => __( '特色图片>自定义缩略图>随机缩略图', 'theme-textdomain' ),
-		'three' => __( '特色图片>自定义缩略图>文章第一张图>随机缩略图', 'theme-textdomain' ),
-	);
-	
-	$linkpage_array = array(
-		'one' => __( '完整链接信息', 'theme-textdomain' ),
-		'two' => __( '基础链接信息', 'theme-textdomain' ),
-	);
-	
-	$gravatar_array = array(
-		'one' => __( 'Cravatar源', 'theme-textdomain' ),
-		'two' => __( 'weavatar源', 'theme-textdomain' ),
-		'three' => __( 'Loli源', 'theme-textdomain' ),
-		'four' => __( 'sep.cc源', 'theme-textdomain' ),
 	);
 
 	$options = array();
@@ -109,6 +115,15 @@ function optionsframework_options() {
 		'name' => __( '基础功能设置', 'theme-textdomain' ),
 		'type' => 'heading'
 	);
+	
+	$options[] = array(
+		'name' => __( '是否启用旧版小工具', 'theme-textdomain' ),
+		'desc' => __( '默认关闭。旧版小工具相比块编辑小工具要简单一些', 'theme-textdomain' ),
+		'id' => $shortname."_widgets",
+		'std' => 'close',
+		'type' => 'select',
+		'options' => $whether_arrays
+	);
 
 	$options[] = array(
 		'name' => __( '是否展示导航栏的搜索框', 'theme-textdomain' ),
@@ -184,7 +199,11 @@ function optionsframework_options() {
 		'id' => $shortname."_thumbnail",
 		'std' => 'one',
 		'type' => 'select',
-		'options' => $thumbnail_array
+		'options' => array(
+			'one' => __( '随机缩略图', 'theme-textdomain' ),
+			'two' => __( '特色图片>自定义缩略图>随机缩略图', 'theme-textdomain' ),
+			'three' => __( '特色图片>自定义缩略图>文章第一张图>随机缩略图', 'theme-textdomain' ),
+		)
 	);
 	
 	$options[] = array(
@@ -193,18 +212,27 @@ function optionsframework_options() {
 		'id' => $shortname."_linkpage",
 		'std' => 'one',
 		'type' => 'select',
-		'options' => $linkpage_array
+		'options' => array(
+			'one' => __( '完整链接信息', 'theme-textdomain' ),
+			'two' => __( '基础链接信息', 'theme-textdomain' ),
+		)
 	);
 	
 	$options[] = array(
 		'name' => __( 'Gravatar头像替换源', 'theme-textdomain' ),
 		'desc' => __( '解决Gravatar无法展示的问题，默认使用Cravatar', 'theme-textdomain' ),
 		'id' => $shortname."_gravatar",
-		'std' => 'one',
+		'std' => '1',
 		'type' => 'select',
-		'options' => $gravatar_array
+		'options' => array(
+			'0' => __( '官方源', 'theme-textdomain' ),
+			'1' => __( 'Weavatar源', 'theme-textdomain' ),
+			'2' => __( 'Cravatar源', 'theme-textdomain' ),
+			'3' => __( 'Loli.net源', 'theme-textdomain' ),
+			'4' => __( 'Sep.cc源', 'theme-textdomain' ),
+		)
 	);
-	
+
 	$options[] = array(
 		'name' => __( '是否开启代码高亮功能(Prism.js)', 'theme-textdomain' ),
 		'desc' => __( '默认关闭', 'theme-textdomain' ),
@@ -213,7 +241,7 @@ function optionsframework_options() {
 		'type' => 'select',
 		'options' => $whether_arrays
 	);
-	
+
 	$options[] = array(
 		'name' => __( '是否开启走心评论功能', 'theme-textdomain' ),
 		'desc' => __( '默认关闭', 'theme-textdomain' ),
@@ -224,11 +252,44 @@ function optionsframework_options() {
 	);
 
 	$options[] = array(
+		'name' => __( '是否展示独立页面顶部随机图片', 'theme-textdomain' ),
+		'desc' => __( '默认展示', 'theme-textdomain' ),
+		'id' => $shortname."_tcbgimg",
+		'std' => 'display',
+		'type' => 'select',
+		'options' => $whether_array
+	);
+
+	$options[] = array(
+		'name' => __( '走心评论独立页面子标题', 'theme-textdomain' ),
+		'desc' => __( '自定义子标题，需要展示随机背景图片才可见，不填展示默认文案「每一条评论，都是一个故事！」', 'theme-textdomain' ),
+		'id' => $shortname."_tctagline",
+		'class' => 'sub-level',
+		'std' => '',
+		'type' => 'text'
+	);
+
+	$options[] = array(
 		'name' => __( '输入您的走心评论独立页面链接', 'theme-textdomain' ),
-		'desc' => __( '填写完整链接地址，请包含http或者https', 'theme-textdomain' ),
+		'desc' => __( '评论中入选走心评论按钮的链接，可不填；若填写请填写完整链接地址，需包含http或者https', 'theme-textdomain' ),
 		'id' => $shortname."_touchingurl",
 		'std' => '',
 		'type' => 'text'
+	);
+
+	$options[] = array(
+		'name' => __( '走心评论独立页面显示几列', 'theme-textdomain' ),
+		'desc' => __( '此设置只针对pc端，移动端根据宽度自适应', 'theme-textdomain' ),
+		'id' => $shortname."_touchingcol",
+		'class' => 'sub-level',
+		'std' => '4',
+		'type' => 'radio',
+		'options' => array(
+			'1' => '1列',
+			'2' => '2列',
+			'3' => '3列',
+			'4' => '4列',
+		)
 	);
 
 	$options[] = array(
@@ -257,6 +318,18 @@ function optionsframework_options() {
 		'desc' => __( '微信收款二维码图片，大小建议：170px*170px', 'theme-textdomain' ),
 		'id' => $shortname."_wxpay",
 		'type' => 'upload'
+	);
+
+	$options[] = array(
+		'name' => __( '更新日志', 'theme-textdomain' ),
+		'type' => 'heading'
+	);
+
+
+	$options[] = array(
+		'desc' => get_changelog_content(),
+		'id' => $shortname . "_changelog",
+		'type' => 'info'
 	);
 
 	return $options;

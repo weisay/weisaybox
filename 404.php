@@ -8,7 +8,7 @@
 <div class="site">当前位置： <a title="返回首页" href="<?php bloginfo('url'); ?>/">首页</a> &gt; 404 &gt; 页面已飞走，试试搜索吧</div>
 </div>
 <div class="article article_c article_e sorry">
-<img src="<?php bloginfo('template_directory'); ?>/images/404.png" alt="404">
+<img src="<?php echo esc_url(get_template_directory_uri() . '/images/404.png'); ?>" alt="404">
 </div>
 <div class="article article_c article_d">
 	<h3 class="center subtitle">你迷路了?试试搜索吧</h3>

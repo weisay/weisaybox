@@ -3,21 +3,22 @@
 <head>
 <meta charset="<?php bloginfo('charset'); ?>" />
 <meta name="viewport" content="width=device-width,initial-scale=1.0,maximum-scale=1.0,maximum-scale=2.0,shrink-to-fit=no" />
-<?php include('includes/seo.php'); ?>
+<?php require get_template_directory() . '/includes/seo.php'; ?>
 <link rel="profile" href="http://gmpg.org/xfn/11">
-<script type="text/javascript" src="<?php bloginfo('template_directory'); ?>/js/jquery.min.js?ver=3.7.1"></script>
-<script type="text/javascript" src="<?php bloginfo('template_directory'); ?>/js/mmenu.js?ver=<?php $theme=wp_get_theme(); echo $theme->get('Version'); ?>"></script>
-<script type="text/javascript" src="<?php bloginfo('template_directory'); ?>/js/dark.min.js?ver=<?php $theme=wp_get_theme(); echo $theme->get('Version'); ?>"></script>
+<?php $theme = wp_get_theme(); $themeversion = $theme -> get('Version'); ?>
+<script type="text/javascript" src="<?php echo esc_url(get_template_directory_uri() . '/js/jquery.min.js?ver=3.7.1'); ?>"></script>
+<script type="text/javascript" src="<?php echo esc_url(get_template_directory_uri() . '/js/mmenu.js?ver=' . $themeversion); ?>"></script>
+<script type="text/javascript" src="<?php echo esc_url(get_template_directory_uri() . '/js/dark.min.js?ver=' . $themeversion); ?>"></script>
 <?php if ( is_singular() ){ ?>
 <?php if (weisay_option('wei_prismjs') == 'displays') : ?>
-<script type="text/javascript" src="<?php bloginfo('template_directory'); ?>/js/prism.js?ver=<?php $theme=wp_get_theme(); echo $theme->get('Version'); ?>"></script>
+<script type="text/javascript" src="<?php echo esc_url(get_template_directory_uri() . '/js/prism.js?ver=' . $themeversion); ?>"></script>
 <?php endif; ?>
-<script type="text/javascript" src="<?php bloginfo('template_directory'); ?>/comments-ajax.js?ver=<?php $theme=wp_get_theme(); echo $theme->get('Version'); ?>"></script>
-<script type="text/javascript" src="<?php bloginfo('template_directory'); ?>/js/realgravatar.js?ver=<?php $theme=wp_get_theme(); echo $theme->get('Version'); ?>"></script>
+<script type="text/javascript" src="<?php echo esc_url(get_template_directory_uri() . '/comments-ajax.js?ver=' . $themeversion); ?>"></script>
+<script type="text/javascript" src="<?php echo esc_url(get_template_directory_uri() . '/js/realgravatar.js?ver=' . $themeversion); ?>"></script>
 <?php } ?>
 <?php wp_head(); ?>
-<script type="text/javascript" src="<?php bloginfo('template_directory');?>/js/lazyload.js?ver=<?php $theme=wp_get_theme(); echo $theme->get('Version'); ?>"></script>
-<script type="text/javascript" src="<?php bloginfo('template_directory'); ?>/js/weisay.js?ver=<?php $theme=wp_get_theme(); echo $theme->get('Version'); ?>"></script>
+<script type="text/javascript" src="<?php echo esc_url(get_template_directory_uri() . '/js/lazyload.js?ver=' . $themeversion); ?>"></script>
+<script type="text/javascript" src="<?php echo esc_url(get_template_directory_uri() . '/js/weisay.js?ver=' . $themeversion); ?>"></script>
 <link rel="pingback" href="<?php bloginfo('pingback_url'); ?>" />
 </head>
 <body>

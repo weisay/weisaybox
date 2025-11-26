@@ -6,8 +6,10 @@ if (!function_exists('optionsframework_init')) {
 	load_template( $optionsfile );
 }
 
-include("includes/patch.php");
-include("includes/patch_emoji.php");
+require get_template_directory() . '/includes/patch.php';
+require get_template_directory() . '/includes/patch-emoji.php';
+require get_template_directory() . '/includes/tags.php';
+require get_template_directory() . '/includes/theme-updater.php';
 if (function_exists('register_sidebar'))
 {
 	register_sidebar(array(
@@ -59,6 +61,12 @@ if ( ! function_exists( 'weisaybox_styles' ) ) {
 }
 add_action( 'wp_enqueue_scripts', 'weisaybox_styles', '1' );
 
+//独立页面增加摘要功能
+add_action('init', 'page_excerpt');
+function page_excerpt() {
+	add_post_type_support('page', array('excerpt'));
+}
+
 //添加HTML编辑器自定义快捷按钮
 function my_quicktags($mce_settings) {
 ?>
@@ -76,54 +84,72 @@ add_action('after_wp_tiny_mce', 'my_quicktags');
 
 //替换Gavatar头像地址
 $gravatar_urls = array('www.gravatar.com', '0.gravatar.com', '1.gravatar.com', '2.gravatar.com', 'secure.gravatar.com', 'cn.gravatar.com');
-function cravatar($avatar)
-{
-	global $gravatar_urls;
-	return str_replace($gravatar_urls, 'cravatar.cn', $avatar);
-}
-function weavatar_avatar($avatar)
-{
-	global $gravatar_urls;
-	return str_replace($gravatar_urls, 'weavatar.com', $avatar);
-}
-function loli_avatar($avatar)
-{
-	global $gravatar_urls;
-	return str_replace($gravatar_urls, 'gravatar.loli.net', $avatar);
-}
-function sep_cc_avatar($avatar)
-{
-	global $gravatar_urls;
-	return str_replace($gravatar_urls, 'cdn.sep.cc', $avatar);
-}
-if (weisay_option('wei_gravatar') == 'two') {
-	add_filter('get_avatar', 'weavatar_avatar');
-	add_filter('get_avatar_url', 'weavatar_avatar');
-} elseif (weisay_option('wei_gravatar') == 'three') {
-	add_filter('get_avatar', 'loli_avatar');
-	add_filter('get_avatar_url', 'loli_avatar');
-} elseif (weisay_option('wei_gravatar') == 'four') {
-	add_filter('get_avatar', 'sep_cc_avatar');
-	add_filter('get_avatar_url', 'sep_cc_avatar');
+$gravatar_mirrors = array(
+	'weavatar' => 'weavatar.com',
+	'cravatar' => 'cravatar.cn',
+	'loli_net' => 'gravatar.loli.net',
+	'sep_cc' => 'cdn.sep.cc',
+	'official' => false
+);
+if (weisay_option('wei_gravatar') == '0') {
+	$gravatar_mirror = 'official';
+} elseif (weisay_option('wei_gravatar') == '2') {
+	$gravatar_mirror = 'cravatar';
+} elseif (weisay_option('wei_gravatar') == '3') {
+	$gravatar_mirror = 'loli_net';
+} elseif (weisay_option('wei_gravatar') == '4') {
+	$gravatar_mirror = 'sep_cc';
 } else {
-	add_filter('get_avatar', 'cravatar');
-	add_filter('get_avatar_url', 'cravatar');
+	$gravatar_mirror = 'weavatar';
 }
-
-// 获得热评文章
-function simple_get_most_viewed($posts_num=10, $days=700){
-	global $wpdb;
-	$sql = "SELECT ID , post_title , comment_count
-			FROM $wpdb->posts
-			WHERE post_type = 'post' AND TO_DAYS(now()) - TO_DAYS(post_date) < $days
-			AND ($wpdb->posts.`post_status` = 'publish' OR $wpdb->posts.`post_status` = 'inherit')
-			ORDER BY comment_count DESC LIMIT 0 , $posts_num ";
-	$posts = $wpdb->get_results($sql);
-	$output = "";
-	foreach ($posts as $post){
-		$output .= "\n<li><a href= \"".get_permalink($post->ID)."\" rel=\"bookmark\" title=\"".$post->post_title." (".$post->comment_count."条评论)\" >". $post->post_title."</a></li>";
+function custom_gravatar($avatar) {
+	global $gravatar_urls, $gravatar_mirror, $gravatar_mirrors;
+	if ($gravatar_mirror === 'official') {
+		return $avatar;
 	}
-	echo $output;
+	if (isset($gravatar_mirrors[$gravatar_mirror]) && $gravatar_mirrors[$gravatar_mirror]) {
+		return str_replace($gravatar_urls, $gravatar_mirrors[$gravatar_mirror], $avatar);
+	}
+	return $avatar;
+}
+add_filter('get_avatar', 'custom_gravatar');
+add_filter('get_avatar_url', 'custom_gravatar');
+
+//热评日志
+function get_hot_reviews($posts_num = 10, $days = 365) {
+	global $wpdb;
+	$posts_num = absint($posts_num);
+	$days = absint($days);
+	$cache_key = "hot_reviews_{$days}_{$posts_num}";
+	$output = get_transient($cache_key);
+	if ($output === false) {
+		$sql = $wpdb->prepare(
+			"SELECT ID, post_title, comment_count
+			FROM {$wpdb->posts}
+			WHERE post_type = 'post'
+			AND post_date >= DATE_SUB(NOW(), INTERVAL %d DAY)
+			AND (post_status = 'publish' OR post_status = 'inherit')
+			ORDER BY comment_count DESC
+			LIMIT %d",
+			$days,
+			$posts_num
+		);
+		$posts = $wpdb->get_results($sql);
+		$output = '';
+		if (!empty($posts)) {
+			foreach ($posts as $post) {
+				$title_attr = esc_attr($post->post_title . " ({$post->comment_count}条评论)");
+				$output .= sprintf(
+					'<li><a href="%s" rel="bookmark" title="%s">%s</a></li>' . "\n",
+					esc_url(get_permalink($post->ID)),
+					$title_attr,
+					esc_html($post->post_title)
+				);
+			}
+		}
+		set_transient($cache_key, $output, 2 * HOUR_IN_SECONDS);
+	}
+	return $output;
 }
 
 //热门日志
@@ -210,18 +236,25 @@ function get_timespan_most_viewed_category($type, $mode = '', $limit = 10, $disp
 }
 
 //分页
-function paging_nav(){
+function paging_nav() {
 	global $wp_query;
-	$big = 999999999; // 需要一个不太可能的整数
-	$pagination_links = paginate_links( array(
-		'base' => str_replace( $big, '%#%', esc_url( get_pagenum_link( $big ) ) ),
-		'format' => '?paged=%#%',
-		'current' => max( 1, get_query_var('paged') ),
-		'total' => $wp_query->max_num_pages
-	) );
-	echo '<div class="pagination">';
-	echo $pagination_links;
-	echo '</div>';
+	if ($wp_query->max_num_pages <= 1) {
+		return;
+	}
+	$big = 99999999; // 需要一个不太可能的整数
+	$pagination_links = paginate_links(array(
+		'base' => str_replace($big, '%#%', esc_url(get_pagenum_link($big))),
+		'format' => get_option('permalink_structure') ? 'page/%#%/' : '&paged=%#%',
+		'current' => max(1, get_query_var('paged')),
+		'total' => $wp_query->max_num_pages,
+		'mid_size' => 2,
+		'end_size' => 1
+	));
+	if ($pagination_links) {
+		$pagination_links = preg_replace('#(/page/1)/(?=\?|&|["\']|$)#', '/', $pagination_links);
+		$pagination_links = preg_replace('#(/page/1)(?=\?|&|["\']|$)#', '', $pagination_links);
+	}
+	echo '<div class="pagination">' . $pagination_links . '</div>';
 }
 
 //日志归档
@@ -368,7 +401,7 @@ function weisay_comment($comment, $args, $depth) {
 <div id="div-comment-<?php comment_ID() ?>" class="comment-body">
 	<?php $add_below = 'div-comment'; ?>
 	<div class="comment-meta">
-	<div class="comment-author vcard"><?php echo get_avatar( $comment, 40, '', get_comment_author() ); ?></div>
+	<div class="comment-author vcard"><?php echo get_avatar( $comment->comment_author_email, 40, '', get_comment_author() ); ?></div>
 		<?php if ( $comment->comment_approved == '1' ) : ?>
 		<div class="comment-floor"><?php
 			if(!$parent_id = $comment->comment_parent){
@@ -384,7 +417,14 @@ function weisay_comment($comment, $args, $depth) {
 		<div class="comment-metadata">
 		<?php comment_date('Y-m-d') ?> <?php comment_time() ?><?php edit_comment_link('编辑','&nbsp;&nbsp;•&nbsp;&nbsp;',''); ?>
 		</div>
-		<?php if( (weisay_option('wei_touching') == 'displays') && ( $comment->comment_karma == '1' )) : ?><div class="touching-comments-chosen"><a href="<?php echo weisay_option('wei_touchingurl'); ?>" target="_blank"><span>入选走心评论</span></a></div><?php endif; ?>
+		<?php if( (weisay_option('wei_touching') == 'displays') && ( $comment->comment_karma == '1' )) : ?><div class="touching-comments-chosen"><?php
+		$touchingUrl = weisay_option('wei_touchingurl');
+		if ($touchingUrl) {
+			echo '<a href="' . $touchingUrl . '" target="_blank"><span>入选走心评论</span></a>';
+		} else {
+			echo '<span>入选走心评论</span>';
+		}
+		?></div><?php endif; ?>
 	</div>
 	<div class="comment-content">
 	<?php if ( $comment->comment_approved == '0' ) : ?>
@@ -403,9 +443,9 @@ function weisay_comment($comment, $args, $depth) {
 	<?php if (weisay_option('wei_touching') == 'displays' && current_user_can('manage_options')) : ?>
 	<span class="touching-comments-button"><a class="karma-link" data-karma="<?php echo $comment->comment_karma; ?>" href="<?php echo wp_nonce_url( site_url('/comment-karma'), 'KARMA_NONCE' ); ?>" onclick="return post_karma(<?php comment_ID(); ?>, this.href, this)">
 		<?php if ($comment->comment_karma == 0) {
-		echo '<span title="加入走心"><svg t="1691142362631" class="icon" viewBox="0 0 1024 1024" version="1.1" xmlns="http://www.w3.org/2000/svg" p-id="3461" ><path d="M709.56577067 110.4732032c-96.8271424 0-166.18710933 87.25008853-196.0785664 133.39655893-29.9242016-46.1464704-99.2525152-133.39655893-196.07747414-133.39655893-138.9415136 0-251.94071467 125.20683413-251.94071466 279.09134827 0 71.95780053 48.8076128 175.11579733 108.0556768 229.1037952 81.95836693 105.30066347 312.36872 294.85954133 340.81281173 294.85954133 28.94728533 0 254.41302293-185.87497493 337.85259093-293.59773653 60.28719787-54.93435093 109.33167147-158.2342464 109.33167147-230.3656C961.52176747 235.6789472 848.50401067 110.4732032 709.56577067 110.4732032M902.11434027 389.56455147c0 57.54855787-41.73561173 143.42877973-91.125008 187.5253632-1.35349333 1.2301504-2.58255147 2.58364373-3.81161067 4.06593706-73.42262933 95.66248427-221.2448032 214.31688427-292.6830368 266.2877408C461.38864 808.5743296 301.43851307 687.4618112 219.3229664 580.77818347c-1.1024416-1.44954773-2.39371733-2.80522347-3.74721067-4.06593707-49.2027456-44.03436693-90.71568533-129.69410027-90.71568533-187.14769493 0-121.14308053 86.3670432-219.71666667 192.5496608-219.71666667 68.4452672 0 134.3407296 74.08409387 169.27394667 147.5383776 4.6291648 9.7331424 14.8982464 15.7954816 26.80461866 15.7954816s22.17436267-6.0634304 26.83518187-15.7954816c34.90156373-73.45428373 100.76427947-147.5383776 169.24338453-147.5383776C815.7451136 169.8478848 902.11434027 268.42147093 902.11434027 389.56455147" fill="#d81e06" p-id="3462"></path></svg></span>';
+		echo '<span title="加入走心"><svg class="hearticon" viewBox="0 0 1024 1024"><path d="M752 144c55.6 0 107.8 21.6 147.1 60.9S960 296.4 960 352c0 32.7-6.1 66.4-18.1 100.2-11.4 32-28.3 64.9-50.3 97.8-38.7 57.8-93.4 116.2-162.5 173.6C643 795.1 555.6 847.2 512 871.5c-43.2-24-129.4-75.1-215.2-146-69.6-57.5-124.6-116-163.7-174-22.2-33.1-39.3-66.1-50.8-98.4C70.2 418.9 64 385 64 352c0-55.6 21.6-107.8 60.9-147.1S216.4 144 272 144c76.9 0 147.2 42.2 183.6 110.1l28.2 52.7c12.1 22.5 44.4 22.5 56.4 0l28.2-52.7C604.8 186.2 675.1 144 752 144z m0-64c-101.3 0-189.7 55.4-236.5 137.6-1.5 2.7-5.4 2.7-6.9 0C461.7 135.4 373.3 80 272 80 121.8 80 0 201.8 0 352c0 338 512 592 512 592s512-255 512-592c0-150.2-121.8-272-272-272z" fill="#d81e06"></path></svg></span>';
 		} else {
-		echo '<span title="取消走心"><svg t="1691141971354" class="icon" viewBox="0 0 1024 1024" version="1.1" xmlns="http://www.w3.org/2000/svg" p-id="3103"><path d="M709.56577067 110.4732032c-96.8271424 0-166.18710933 87.25008853-196.0785664 133.39655893-29.9242016-46.1464704-99.2525152-133.39655893-196.07747414-133.39655893-138.9415136 0-251.94071467 125.20683413-251.94071466 279.09134827 0 71.95780053 48.8076128 175.11579733 108.0556768 229.1037952 81.95836693 105.30066347 312.36872 294.85954133 340.81281173 294.85954133 28.94728533 0 254.41302293-185.87497493 337.85259093-293.59773653 60.28719787-54.93435093 109.33167147-158.2342464 109.33167147-230.3656C961.52176747 235.6789472 848.50401067 110.4732032 709.56577067 110.4732032" fill="#d81e06" p-id="3104"></path></svg></span>';
+		echo '<span title="取消走心"><svg class="hearticon" viewBox="0 0 1024 1024"><path d="M1024 352c0 337-512 592-512 592S0 690 0 352C0 201.8 121.8 80 272 80c101.3 0 189.7 55.4 236.5 137.6 1.5 2.7 5.4 2.7 6.9 0C562.3 135.4 650.7 80 752 80c150.2 0 272 121.8 272 272z" fill="#d81e06"></path></svg></span>';
 		}
 	?></a></span>
 	<?php endif; ?>
@@ -414,30 +454,28 @@ function weisay_comment($comment, $args, $depth) {
 </div>
 <?php
 }
-function weisay_end_comment() {
-		echo '</li>';
-}
+function weisay_end_comment() {	echo '</li>'; }
 
 //走心评论独立页面使用
 function weisay_touching_comments_list($comment) {
 	$cpage = get_page_of_comment( $comment->comment_ID, $args = array() );
 ?>
 <li <?php comment_class(); ?> id="comment-<?php comment_ID() ?>">
-	<div id="comment-<?php comment_ID(); ?>" class="comment-body">
-		<div class="comment-meta">
-		<div class="comment-author vcard"><?php echo get_avatar( $comment, 40, '', get_comment_author() ); ?></div>
-		<b class="fn comment-name"><?php comment_author_link() ?></b><span class="edit-link"><?php edit_comment_link('编辑', ' ' ); ?></span>
-		</div>
-		<div class="comment-content"><?php comment_text(); ?></div>
-		<div class="comment-metadata">
-		<?php comment_date('Y-m-d') ?> 评论于&nbsp;&nbsp;•&nbsp;&nbsp;<a href="<?php echo get_comment_link($comment->comment_ID, $cpage); ?>" target="_blank"><?php echo get_the_title($comment->comment_post_ID); ?></a>
-		</div>
-	</div><div class="clear"></div>
+<div id="div-comment-<?php comment_ID() ?>" class="comment-body">
+<?php $add_below = 'div-comment'; ?>
+<div class="comment-info">
+<div class="comment-author">
+<p class="fn comment-name"><?php comment_author_link(); ?></p>
+<p class="comment-datetime"><?php comment_date('Y-m-d'); ?></p>
+</div>
+<div class="comment-avatar vcard"><?php echo get_avatar( $comment->comment_author_email, 48, '', get_comment_author() ); ?></div>
+</div>
+<div class="comment-content"><?php comment_text() ?></div>
+<div class="comment-from">评论于<span class="bullet">•</span><a href="<?php echo get_comment_link($comment->comment_ID, $cpage); ?>" target="_blank"><?php echo get_the_title($comment->comment_post_ID); ?></a></div>
+</div><div class="clear"></div>
 <?php
 }
-function weisay_touching_comments_end_list() {
-		echo '</li>';
-}
+function weisay_touching_comments_end_list() { echo '</li>'; }
 
 /**
  * 处理走心评论

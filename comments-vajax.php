@@ -6,15 +6,20 @@
  */
 session_start();
 
-if ( 'POST' != $_SERVER['REQUEST_METHOD'] ) {
-	header('Allow: POST');
-	header('HTTP/1.1 405 Method Not Allowed');
-	header('Content-Type: text/plain');
+if ( 'POST' !== $_SERVER['REQUEST_METHOD'] ) {
+	$protocol = $_SERVER['SERVER_PROTOCOL'];
+	if ( ! in_array( $protocol, array( 'HTTP/1.1', 'HTTP/2', 'HTTP/2.0', 'HTTP/3' ), true ) ) {
+		$protocol = 'HTTP/1.0';
+	}
+
+	header( 'Allow: POST' );
+	header( "$protocol 405 Method Not Allowed" );
+	header( 'Content-Type: text/plain' );
 	exit;
 }
 
 /** Sets up the WordPress Environment. */
-require( dirname(__FILE__) . '/../../../wp-load.php' ); // 此 comments-ajax.php 位於主題資料夾,所以位置已不同
+require(__DIR__ . '/../../../wp-load.php'); // 此 comments-ajax.php 位於主題資料夾,所以位置已不同
 
 nocache_headers();
 
@@ -142,7 +147,7 @@ $tmp_c = get_comment($tmp_c->comment_parent);
 <li <?php comment_class(); ?> id="li-comment-<?php comment_ID() ?>">
 <div id="div-comment-<?php comment_ID() ?>" class="comment-body">
 	<div class="comment-meta">
-		<div class="comment-author vcard"><?php echo get_avatar( $comment, 40, '', get_comment_author() ); ?></div>
+		<div class="comment-author vcard"><?php echo get_avatar( $comment->comment_author_email, 40, '', get_comment_author() ); ?></div>
 		<b class="fn comment-name"><?php comment_author_link() ?></b>
 		<div class="comment-metadata">
 		<?php comment_date('Y-m-d') ?> <?php comment_time() ?><?php edit_comment_link('编辑','&nbsp;&nbsp;•&nbsp;&nbsp;',''); ?>

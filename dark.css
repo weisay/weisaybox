@@ -85,6 +85,17 @@
 .dark .shang-close{background:#2a2a2a;color:#999;}
 .dark .shang-close:hover{color:#eee;}
 .dark .shang-body .shang-qrcode span{background:#2a2a2a;}
+.dark .page-tag .tag-index li{background:#333;color:#666;}
+.dark .page-tag .tag-index li:hover{background:#6992dd;}
+.dark .page-tag .tag-index li a{color:#c1c4c9;}
+.dark .page-tag .tag-index li a:hover{color:#fafafa;}
+.dark .page-tag .tag-index li:hover:not(:has(a)){background:#333;}
+.dark .page-tag .tag-list li{border-bottom:1px dashed #2e333a;}
+.dark .page-tag .tag-list li:last-child{border:none;}
+.dark .page-tag .tag-cloud-item{background:#333;border:1px solid #444;}
+.dark .page-tag .tag-cloud-item:hover{background:#6992dd;border:1px solid #6992dd;color:#e8eaed;}
+.dark .page-tag .tag-cloud-count{background:#3a3f45;color:#9da1a7;border:1px solid #555;}
+.dark .page-tag .tag-cloud-item:hover .tag-cloud-count{background:#3a66b9;border:1px solid #3a66b9;color:#c1c4c9;}
 .dark .comment-list .comment{border-top:1px #555 solid;}
 .dark .comment-list li.comment ul.children li{border-top: 1px dashed #777;}
 .dark .comment-list .thread-even{background:#2c2c2c;}
@@ -96,9 +107,17 @@
 .dark .comment-list .comment-body .comment-content .comment-approved{color:#da4839;}
 .dark .comment-list .comment-body .comment-reply a{border:1px solid #5282dd;}
 .dark .comment-list .comment-body .comment-reply a:hover{background:#5282dd;color:#eee;}
-.dark .touching-comments-chosen a{color:#333;}
-.dark .touching-comments-chosen span{background:#8f6f16;}
-.dark .comment-list .comment-body:hover .touching-comments-chosen span{background:#9e7a14;}
+.dark .touching-header .touching-title-only{background:#222;border:1px solid #555;}
+.dark .touching-header h2{color:#f5f7f8;}
+.dark .touching-header p{color:#c1c4c9;}
+.dark .touching-waterfall .touching-list .comment-datetime{color:#767a80;}
+.dark .touching-waterfall .touching-list .comment-content p{color:#c1c4c9;}
+.dark .touching-waterfall .touching-list .comment-from{color:#8a8e94;}
+.dark .touching-waterfall li.comment{border:1px solid #555;}
+.dark .touching-waterfall li.comment.even{background:#222;}
+.dark .touching-waterfall li.comment.odd{background:#2c2c2c;}
+.dark .comment-list .comment-body .touching-comments-chosen{background:#483c20;}
+.dark .comment-list .comment-body .touching-comments-chosen a,.dark .comment-list .comment-body .touching-comments-chosen span{color:#b7a89a;}
 .dark #respond_box{border-top:1px #555 solid;}
 .dark .comment-respond .comment-reply-title{color:#bbb;}
 .dark #comment{background:#333;}
@@ -179,9 +198,6 @@
 .dark .article h3.subtitle{border-top:1px #555 solid;}
 .dark .comment-list .thread-even{background:#222;}
 .dark .comment-list .comment-body:hover{background:#2a2a2a;}
-.dark .touching-comments-chosen{background:#b9952f;}
-.dark .touching-comments-chosen span{background:#b9952f;}
-.dark .comment-list .comment-body:hover .touching-comments-chosen span{background:#b9952f;}
 .dark #commentform #author{background:#444;}
 .dark #commentform #email{background:#444;}
 .dark #commentform #url{background:#444;}

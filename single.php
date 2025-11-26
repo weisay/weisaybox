@@ -44,7 +44,7 @@
 </ul>
 </div>
 <div class="article article_c">
-<?php include('includes/related.php'); ?>
+<?php require get_template_directory() . '/includes/related.php'; ?>
 <div class="clear"></div>
 </div>
 <div class="article article_c">

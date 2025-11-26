@@ -6,7 +6,7 @@
 <?php $image = get_post_meta($post->ID, 'thumbnail', true); ?>
 <img class="diagram" src="<?php echo $image; ?>" alt="<?php the_title(); ?>" loading="lazy" />
 <?php else: ?>
-<img class="diagram" src="<?php bloginfo('template_directory'); ?>/images/random/<?php echo rand(1,30)?>.jpg" alt="<?php the_title(); ?>" loading="lazy" />
+<img class="diagram" src="<?php echo esc_url(get_template_directory_uri() . '/images/random/' . rand(1,30) . '.jpg'); ?>" alt="<?php the_title(); ?>" loading="lazy" />
 <?php endif; ?>
 </a>
 </div>

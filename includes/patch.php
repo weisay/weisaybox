@@ -1,7 +1,9 @@
 <?php
 // 切换经典小工具
-//add_filter( 'gutenberg_use_widgets_block_editor', '__return_false' );
-//add_filter( 'use_widgets_block_editor', '__return_false' );
+if (weisay_option('wei_widgets') == 'displays') {
+add_filter( 'gutenberg_use_widgets_block_editor', '__return_false' );
+add_filter( 'use_widgets_block_editor', '__return_false' );
+}
 
 //加载后台友情链接管理
 add_filter( 'pre_option_link_manager_enabled', '__return_true' );
@@ -38,17 +40,17 @@ add_theme_support( 'automatic-feed-links' );
 
 //屏蔽谷歌文字
 function coolwp_remove_open_sans_from_wp_core() {
-        wp_deregister_style( 'open-sans' );
-        wp_register_style( 'open-sans', false );
-        wp_enqueue_style('open-sans','');
+	wp_deregister_style( 'open-sans' );
+	wp_register_style( 'open-sans', false );
+	wp_enqueue_style('open-sans','');
 }
 add_action( 'init', 'coolwp_remove_open_sans_from_wp_core' );
 
 //评论表情路径
 add_filter('smilies_src','custom_smilies_src',1,10);
- function custom_smilies_src ($img_src, $img, $siteurl){
-     return get_bloginfo('template_directory').'/images/smilies/'.$img;
- }
+function custom_smilies_src ($img_src, $img, $siteurl){
+	return esc_url(get_template_directory_uri() . '/images/smilies/' . $img);
+}
 
 //禁用embeds链接嵌入
 function disable_embeds_init() {
@@ -71,7 +73,7 @@ function disable_embeds_flush_rewrite_rules() { remove_filter( 'rewrite_rules_ar
 register_deactivation_hook( __FILE__, 'disable_embeds_flush_rewrite_rules' );
 
 function remove_footer_admin () {
-echo '<span id="footer-thankyou">感谢使用<a href="https://cn.wordpress.org/">WordPress</a>和<a href="https://www.weisay.com" target="_blank">WeisayBox主题</a>进行创作。</span>';
+echo '<span id="footer-thankyou">感谢使用<a href="https://wordpress.org/">WordPress</a>和<a href="https://www.weisay.com" target="_blank">WeisayBox主题</a>进行创作。</span>';
 }
 add_filter('admin_footer_text', 'remove_footer_admin');
 ?>

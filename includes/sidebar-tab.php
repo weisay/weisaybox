@@ -12,7 +12,7 @@
 <li><a href="<?php the_permalink(); ?>" rel="bookmark" title="<?php the_title_attribute(); ?>"><?php the_title(); ?></a></li>
 <?php endforeach; ?>
 </ul>
-<ul class="active"><?php simple_get_most_viewed(); ?></ul>
+<ul class="active"><?php echo get_hot_reviews(); ?></ul>
 <ul>
 <?php $myposts = get_posts('numberposts=10&orderby=rand');foreach($myposts as $post) :?>
 <li><a href="<?php the_permalink(); ?>" rel="bookmark" title="<?php the_title_attribute(); ?>"><?php the_title(); ?></a></li>

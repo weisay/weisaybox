@@ -5,10 +5,10 @@
 </div>
 <?php endif; ?>
 <div id="tab-title">
-<?php include('includes/sidebar_tab.php'); ?>
+<?php require get_template_directory() . '/includes/sidebar-tab.php'; ?>
 </div>
 <?php if (weisay_option('wei_hotreviewer') != 'hide') {
-	include('includes/sidebar_hotreviewer.php');
+	require get_template_directory() . '/includes/sidebar-hotreviewer.php';
 } ?>
 <?php if ( is_active_sidebar( 'sidebar-2' ) ) : ?>
 <div class="widgets">
@@ -16,7 +16,7 @@
 </div>
 <?php endif; ?>
 <div class="widget">
-<?php include('includes/sidebar_comment.php'); ?>
+<?php require get_template_directory() . '/includes/sidebar-comment.php'; ?>
 </div>
 <?php if (weisay_option('wei_tags') == 'display') : ?>
 <div class="widget">
