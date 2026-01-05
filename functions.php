@@ -6,10 +6,15 @@ if (!function_exists('optionsframework_init')) {
 	load_template( $optionsfile );
 }
 
-require get_template_directory() . '/includes/patch.php';
-require get_template_directory() . '/includes/patch-emoji.php';
-require get_template_directory() . '/includes/tags.php';
-require get_template_directory() . '/includes/theme-updater.php';
+require_once get_template_directory() . '/includes/patch.php';
+require_once get_template_directory() . '/includes/patch-emoji.php';
+require_once get_template_directory() . '/includes/tags.php';
+require_once get_template_directory() . '/includes/theme-updater.php';
+
+if (weisay_option('wei_smtp') == 'open') {
+require_once get_template_directory() . '/includes/mail-smtp.php'; //邮件通知
+}
+
 if (function_exists('register_sidebar'))
 {
 	register_sidebar(array(
@@ -70,14 +75,14 @@ function page_excerpt() {
 //添加HTML编辑器自定义快捷按钮
 function my_quicktags($mce_settings) {
 ?>
-<?php if (weisay_option('wei_prismjs') == 'displays') : ?>
+<?php if (weisay_option('wei_prismjs') == 'open') : ?>
 <script type="text/javascript">
 	var aLanguage = ['html', 'css', 'javascript', 'php', 'java', 'c'];
-	for( var i = 0, length = aLanguage.length; i < length; i++ ) {
+	for( var i = 0, length = aLanguage.length;i < length;i++ ) {
 		QTags.addButton(aLanguage[i], aLanguage[i], '<pre class="line-numbers"><code class="language-' + aLanguage[i] + '">\n', '\n</code></pre>');
 	}
 </script>
-<?php endif; ?>	
+<?php endif;?>	
 <?php
 }
 add_action('after_wp_tiny_mce', 'my_quicktags');
@@ -91,13 +96,13 @@ $gravatar_mirrors = array(
 	'sep_cc' => 'cdn.sep.cc',
 	'official' => false
 );
-if (weisay_option('wei_gravatar') == '0') {
+if (weisay_option('wei_gravatar') == 'zero') {
 	$gravatar_mirror = 'official';
-} elseif (weisay_option('wei_gravatar') == '2') {
+} elseif (weisay_option('wei_gravatar') == 'two') {
 	$gravatar_mirror = 'cravatar';
-} elseif (weisay_option('wei_gravatar') == '3') {
+} elseif (weisay_option('wei_gravatar') == 'three') {
 	$gravatar_mirror = 'loli_net';
-} elseif (weisay_option('wei_gravatar') == '4') {
+} elseif (weisay_option('wei_gravatar') == 'four') {
 	$gravatar_mirror = 'sep_cc';
 } else {
 	$gravatar_mirror = 'weavatar';
@@ -241,7 +246,7 @@ function paging_nav() {
 	if ($wp_query->max_num_pages <= 1) {
 		return;
 	}
-	$big = 99999999; // 需要一个不太可能的整数
+	$big = 99999999;// 需要一个不太可能的整数
 	$pagination_links = paginate_links(array(
 		'base' => str_replace($big, '%#%', esc_url(get_pagenum_link($big))),
 		'format' => get_option('permalink_structure') ? 'page/%#%/' : '&paged=%#%',
@@ -272,7 +277,7 @@ function paging_nav() {
 				$posts = [];
 				}
 			$posts[ mysql2date( 'Y.m', $post->post_date ) ][] = $post;
-			$rawposts[$key] = null; 
+			$rawposts[$key] = null;
 		}
 		$rawposts = null;
 		wp_cache_set( 'posts', $posts, 'iarticle-clean-archive' );
@@ -397,11 +402,11 @@ function weisay_comment($comment, $args, $depth) {
 		}
 	}
 ?>
-<li <?php comment_class(); ?> id="comment-<?php comment_ID() ?>">
+<li <?php comment_class();?> id="comment-<?php comment_ID() ?>">
 <div id="div-comment-<?php comment_ID() ?>" class="comment-body">
-	<?php $add_below = 'div-comment'; ?>
+	<?php $add_below = 'div-comment';?>
 	<div class="comment-meta">
-	<div class="comment-author vcard"><?php echo get_avatar( $comment->comment_author_email, 40, '', get_comment_author() ); ?></div>
+	<div class="comment-author vcard"><?php echo get_avatar( $comment->comment_author_email, 40, '', get_comment_author() );?></div>
 		<?php if ( $comment->comment_approved == '1' ) : ?>
 		<div class="comment-floor"><?php
 			if(!$parent_id = $comment->comment_parent){
@@ -412,25 +417,25 @@ function weisay_comment($comment, $args, $depth) {
 			default:printf('%1$s楼', --$commentcount);
 				}
 			}
-		?></div><?php endif; ?>
-		<b class="fn comment-name"><?php comment_author_link() ?></b><?php printf(( $comment->user_id === $post->post_author ) ? '<span class="post-author">博主</span>' : ''); ?>
+		?></div><?php endif;?>
+		<b class="fn comment-name"><?php comment_author_link() ?></b><?php printf(( $comment->user_id === $post->post_author ) ? '<span class="post-author">博主</span>' : '');?>
 		<div class="comment-metadata">
-		<?php comment_date('Y-m-d') ?> <?php comment_time() ?><?php edit_comment_link('编辑','&nbsp;&nbsp;•&nbsp;&nbsp;',''); ?>
+		<?php comment_date('Y-m-d') ?> <?php comment_time() ?><?php edit_comment_link('编辑','&nbsp;&nbsp;•&nbsp;&nbsp;','');?>
 		</div>
-		<?php if( (weisay_option('wei_touching') == 'displays') && ( $comment->comment_karma == '1' )) : ?><div class="touching-comments-chosen"><?php
+		<?php if( (weisay_option('wei_touching') == 'open') && ( $comment->comment_karma == '1' )) : ?><div class="touching-comments-chosen"><?php
 		$touchingUrl = weisay_option('wei_touchingurl');
 		if ($touchingUrl) {
 			echo '<a href="' . $touchingUrl . '" target="_blank"><span>入选走心评论</span></a>';
 		} else {
 			echo '<span>入选走心评论</span>';
 		}
-		?></div><?php endif; ?>
+		?></div><?php endif;?>
 	</div>
 	<div class="comment-content">
 	<?php if ( $comment->comment_approved == '0' ) : ?>
 	<p class="comment-approved" >您的评论正在等待审核中...</p>
-	<?php endif; ?>
-	<?php comment_text(); ?>
+	<?php endif;?>
+	<?php comment_text();?>
 	</div>
 	<div class="comment-footer">
 		<span class="comment-reply">
@@ -440,42 +445,42 @@ function weisay_comment($comment, $args, $depth) {
 		echo $replyButton;
 		?>
 		</span>
-	<?php if (weisay_option('wei_touching') == 'displays' && current_user_can('manage_options')) : ?>
-	<span class="touching-comments-button"><a class="karma-link" data-karma="<?php echo $comment->comment_karma; ?>" href="<?php echo wp_nonce_url( site_url('/comment-karma'), 'KARMA_NONCE' ); ?>" onclick="return post_karma(<?php comment_ID(); ?>, this.href, this)">
+	<?php if (weisay_option('wei_touching') == 'open' && current_user_can('manage_options')) : ?>
+	<span class="touching-comments-button"><a class="karma-link" data-karma="<?php echo $comment->comment_karma;?>" href="<?php echo wp_nonce_url( site_url('/comment-karma'), 'KARMA_NONCE' );?>" onclick="return post_karma(<?php comment_ID();?>, this.href, this)">
 		<?php if ($comment->comment_karma == 0) {
 		echo '<span title="加入走心"><svg class="hearticon" viewBox="0 0 1024 1024"><path d="M752 144c55.6 0 107.8 21.6 147.1 60.9S960 296.4 960 352c0 32.7-6.1 66.4-18.1 100.2-11.4 32-28.3 64.9-50.3 97.8-38.7 57.8-93.4 116.2-162.5 173.6C643 795.1 555.6 847.2 512 871.5c-43.2-24-129.4-75.1-215.2-146-69.6-57.5-124.6-116-163.7-174-22.2-33.1-39.3-66.1-50.8-98.4C70.2 418.9 64 385 64 352c0-55.6 21.6-107.8 60.9-147.1S216.4 144 272 144c76.9 0 147.2 42.2 183.6 110.1l28.2 52.7c12.1 22.5 44.4 22.5 56.4 0l28.2-52.7C604.8 186.2 675.1 144 752 144z m0-64c-101.3 0-189.7 55.4-236.5 137.6-1.5 2.7-5.4 2.7-6.9 0C461.7 135.4 373.3 80 272 80 121.8 80 0 201.8 0 352c0 338 512 592 512 592s512-255 512-592c0-150.2-121.8-272-272-272z" fill="#d81e06"></path></svg></span>';
 		} else {
 		echo '<span title="取消走心"><svg class="hearticon" viewBox="0 0 1024 1024"><path d="M1024 352c0 337-512 592-512 592S0 690 0 352C0 201.8 121.8 80 272 80c101.3 0 189.7 55.4 236.5 137.6 1.5 2.7 5.4 2.7 6.9 0C562.3 135.4 650.7 80 752 80c150.2 0 272 121.8 272 272z" fill="#d81e06"></path></svg></span>';
 		}
 	?></a></span>
-	<?php endif; ?>
+	<?php endif;?>
 		</div>
 	<div class="clear"></div>
 </div>
 <?php
 }
-function weisay_end_comment() {	echo '</li>'; }
+function weisay_end_comment() {	echo '</li>';}
 
 //走心评论独立页面使用
 function weisay_touching_comments_list($comment) {
 	$cpage = get_page_of_comment( $comment->comment_ID, $args = array() );
 ?>
-<li <?php comment_class(); ?> id="comment-<?php comment_ID() ?>">
+<li <?php comment_class();?> id="comment-<?php comment_ID() ?>">
 <div id="div-comment-<?php comment_ID() ?>" class="comment-body">
-<?php $add_below = 'div-comment'; ?>
+<?php $add_below = 'div-comment';?>
 <div class="comment-info">
 <div class="comment-author">
-<p class="fn comment-name"><?php comment_author_link(); ?></p>
-<p class="comment-datetime"><?php comment_date('Y-m-d'); ?></p>
+<p class="fn comment-name"><?php comment_author_link();?></p>
+<p class="comment-datetime"><?php comment_date('Y-m-d');?></p>
 </div>
-<div class="comment-avatar vcard"><?php echo get_avatar( $comment->comment_author_email, 48, '', get_comment_author() ); ?></div>
+<div class="comment-avatar vcard"><?php echo get_avatar( $comment->comment_author_email, 48, '', get_comment_author() );?></div>
 </div>
 <div class="comment-content"><?php comment_text() ?></div>
-<div class="comment-from">评论于<span class="bullet">•</span><a href="<?php echo get_comment_link($comment->comment_ID, $cpage); ?>" target="_blank"><?php echo get_the_title($comment->comment_post_ID); ?></a></div>
+<div class="comment-from">评论于<span class="bullet">•</span><a href="<?php echo get_comment_link($comment->comment_ID, $cpage);?>" target="_blank"><?php echo get_the_title($comment->comment_post_ID);?></a></div>
 </div><div class="clear"></div>
 <?php
 }
-function weisay_touching_comments_end_list() { echo '</li>'; }
+function weisay_touching_comments_end_list() { echo '</li>';}
 
 /**
  * 处理走心评论
@@ -499,7 +504,7 @@ function weisay_touching_comments_karma_request() {
 	}
 
 	header('Cache-Control: no-cache, must-revalidate');
-	header('Content-type: application/json; charset=utf-8');
+	header('Content-type: application/json;charset=utf-8');
 
 	$result = array(
 		'code'=> 403,
@@ -509,7 +514,7 @@ function weisay_touching_comments_karma_request() {
 	if (!is_user_logged_in() || !current_user_can('manage_options')) {
 		// 未认证的用户拒绝继续执行请求
 		header("HTTP/1.1 403 Forbidden");
-		die(json_encode($result));
+		wp_die(json_encode($result));
 	}
 
 	if (empty($_SERVER['REQUEST_METHOD']) ||
@@ -518,35 +523,25 @@ function weisay_touching_comments_karma_request() {
 		strtolower($_SERVER['HTTP_X_REQUESTED_WITH']) !== 'xmlhttprequest') {
 		$result['message'] = 'Request method not allowed';
 		header("HTTP/1.1 403 Forbidden");
-		die( json_encode($result) );
+		wp_die(json_encode($result));
 	}
 
 	// Check if it's a valid request.
-	$nonce = filter_input(INPUT_GET, '_wpnonce', FILTER_SANITIZE_STRING);
-	if ( $nonce===false || ! wp_verify_nonce( $nonce,  'KARMA_NONCE')) {
+	$nonce = $_REQUEST['_wpnonce'] ?? '';
+	if (empty($nonce) || ! wp_verify_nonce($nonce, 'KARMA_NONCE')) {
 		$result['message'] = 'Security Check';
-		header("HTTP/1.1 403 Forbidden");
-		die( json_encode($result) );
-	}
-
-	if (empty($_POST['comment_id'])) {
-		$result['code'] = 501;
-		$result['message'] = 'Incorrect parameter';
-		header("HTTP/1.1 500 Internal Server Error");
-		die( json_encode($result) );
+		header('HTTP/1.1 403 Forbidden');
+		wp_die(json_encode($result));
 	}
 
 	// Do your stuff here
-	$comment_karma = empty( $_POST['comment_karma'] ) ? '0' : filter_input(INPUT_POST, 'comment_karma', FILTER_SANITIZE_NUMBER_INT);
-	$comment_id = filter_input(INPUT_POST, 'comment_id', FILTER_SANITIZE_NUMBER_INT);
-	if ($comment_karma === false ||
-		$comment_id === false ||
-		!is_numeric($comment_karma) ||
-		!is_numeric($comment_id)) {
+	$comment_id = isset($_POST['comment_id']) ? intval($_POST['comment_id']) : 0;
+	$comment_karma = isset($_POST['comment_karma']) ? intval($_POST['comment_karma']) : 0;
+	if ($comment_id <= 0) {
 		$result['code'] = 501;
 		$result['message'] = 'Incorrect parameter';
-		header("HTTP/1.1 500 Internal Server Error");
-		die( json_encode($result) );
+		header('HTTP/1.1 500 Internal Server Error');
+		wp_die(json_encode($result));
 	}
 
 	// 更新数据库
@@ -569,37 +564,6 @@ function weisay_touching_comments_karma_request() {
 
 add_action( 'template_redirect', 'weisay_touching_comments_karma_request', 0);
 
-//评论邮件通知
-function comment_mail_notify($comment_id) {
-	$admin_email = get_bloginfo ('admin_email'); // $admin_email 可改為你指定的 e-mail.
-	$comment = get_comment($comment_id);
-	$comment_author_email = trim($comment->comment_author_email);
-	$parent_id = $comment->comment_parent ? $comment->comment_parent : '';
-	$to = $parent_id ? trim(get_comment($parent_id)->comment_author_email) : '';
-	$spam_confirmed = $comment->comment_approved;
-	if (($parent_id != '') && ($spam_confirmed != 'spam') && ($to != $admin_email) && ($comment_author_email == $admin_email)) {
-		$wp_email = 'no-reply@' . preg_replace('#^www\.#', '', strtolower($_SERVER['SERVER_NAME'])); // e-mail 發出點, no-reply 可改為可用的 e-mail.
-		$subject = '您在 [' . get_option("blogname") . '] 的评论有新的回复';
-		$message = '
-		<div style="background-color:#eef2fa; border:1px solid #d8e3e8; color:#111; padding:0 15px; -moz-border-radius:5px; -webkit-border-radius:5px; -khtml-border-radius:5px; border-radius:5px;">
-		<p>' . trim(get_comment($parent_id)->comment_author) . ', 您好!</p>
-		<p>您曾在 [' . get_option("blogname") . '] 的文章 《' . get_the_title($comment->comment_post_ID) . '》 上发表评论：<br />'
-		. nl2br(get_comment($parent_id)->comment_content) . '</p>
-		<p>' . trim($comment->comment_author) . ' 给您的回复如下：<br />'
-		. nl2br($comment->comment_content) . '<br /></p>
-		<p>您可以点击 <a href="' . htmlspecialchars(get_comment_link($parent_id)) . '">查看回复的完整内容</a></p>
-		<p>欢迎再次光临 <a href="' . get_option('home') . '">' . get_option('blogname') . '</a></p>
-		<p style="color:#666;">(此邮件由系统自动发送，请勿回复！)</p>
-		</div>';
-		$message = convert_smilies($message);
-		$from = "From: \"" . get_option('blogname') . "\" <$wp_email>";
-		$headers = "$from\nContent-Type: text/html; charset=" . get_option('blog_charset') . "\n";
-		wp_mail( $to, $subject, $message, $headers );
-		//echo 'mail to ', $to, '<br/> ' , $subject, $message; // for testing
-	}
-}
-add_action('comment_post', 'comment_mail_notify');
-
 //评论翻页Ajax
 function AjaxCommentsPage(){
 	if( isset($_POST['action'])&& $_POST['action'] == 'compageajax'){
@@ -611,10 +575,10 @@ function AjaxCommentsPage(){
 			'current' => $pageid,
 			'echo' => true
 		);
-		$order = 'DESC'; 
+		$order = 'DESC';
 		/*处理为倒序输出*/
 		if( 'asc' != get_option('comment_order') ){
-				$order = 'ASC'; 
+				$order = 'ASC';
 		}
 	global $wp_query, $wpdb, $id, $comment, $user_login, $user_ID, $user_identity;
 	/**
@@ -626,11 +590,11 @@ function AjaxCommentsPage(){
 	/**
 	 * The name of the current comment author escaped for use in attributes.
 	 */
-	$comment_author = $commenter['comment_author']; // Escaped by sanitize_comment_cookies()
+	$comment_author = $commenter['comment_author'];// Escaped by sanitize_comment_cookies()
 	/**
 	 * The email address of the current comment author escaped for use in attributes.
 	 */
-	$comment_author_email = $commenter['comment_author_email'];  // Escaped by sanitize_comment_cookies()
+	$comment_author_email = $commenter['comment_author_email']; // Escaped by sanitize_comment_cookies()
 	/**
 	 * The url of the current comment author escaped for use in attributes.
 	 */

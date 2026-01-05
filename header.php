@@ -10,7 +10,7 @@
 <script type="text/javascript" src="<?php echo esc_url(get_template_directory_uri() . '/js/mmenu.js?ver=' . $themeversion); ?>"></script>
 <script type="text/javascript" src="<?php echo esc_url(get_template_directory_uri() . '/js/dark.min.js?ver=' . $themeversion); ?>"></script>
 <?php if ( is_singular() ){ ?>
-<?php if (weisay_option('wei_prismjs') == 'displays') : ?>
+<?php if (weisay_option('wei_prismjs') == 'open') : ?>
 <script type="text/javascript" src="<?php echo esc_url(get_template_directory_uri() . '/js/prism.js?ver=' . $themeversion); ?>"></script>
 <?php endif; ?>
 <script type="text/javascript" src="<?php echo esc_url(get_template_directory_uri() . '/comments-ajax.js?ver=' . $themeversion); ?>"></script>
@@ -20,6 +20,7 @@
 <script type="text/javascript" src="<?php echo esc_url(get_template_directory_uri() . '/js/lazyload.js?ver=' . $themeversion); ?>"></script>
 <script type="text/javascript" src="<?php echo esc_url(get_template_directory_uri() . '/js/weisay.js?ver=' . $themeversion); ?>"></script>
 <link rel="pingback" href="<?php bloginfo('pingback_url'); ?>" />
+<?php echo weisay_option('wei_headcustom'); ?>
 </head>
 <body>
 <div id="head">

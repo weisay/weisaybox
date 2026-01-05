@@ -54,9 +54,19 @@ $('#commentform').submit(function() {
 			var t = addComment, cancel = t.I('cancel-comment-reply-link'), temp = t.I('wp-temp-form-div'), respond = t.I(t.respondId), post = t.I('comment_post_ID').value, parent = t.I('comment_parent').value;
 
 		// comments
-		if ( ! edit && $comments.length ) {
-			n = parseInt($comments.text().match(/\d+/));
-			$comments.text($comments.text().replace( n, n + 1 ));
+		if (!edit && $comments.length) {
+			var text = $comments.text().trim();
+			// 只匹配最后一个数字
+			var m = text.match(/(\d{1,3}(?:,\d{3})*|\d+)(?!.*\d)/);
+			if (!m) return;
+			var raw = m[1];
+			var number = parseInt(raw.replace(/,/g, ''), 10);
+			var next = number + 1;
+			var formatted = raw.includes(',')
+				? next.toLocaleString('en-US')
+				: String(next);
+			text = text.replace(raw, formatted);
+			$comments.text(text);
 		}
 
 		// show comment

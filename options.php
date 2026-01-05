@@ -29,15 +29,22 @@ function get_changelog_content() {
 
 function optionsframework_options() {
 	$shortname = "wei";
-	
-	$whether_array = array(
-		'hide' => __( '隐藏', 'theme-textdomain' ),
-		'display' => __( '展示', 'theme-textdomain' )
+
+	$editor_setting = array(
+		'quicktags' => 1,
+		'tinymce' => 0,
+		'media_buttons' => 0,
+		'textarea_rows' => 4
 	);
 	
-	$whether_arrays = array(
-		'hides' => __( '关闭', 'theme-textdomain' ),
-		'displays' => __( '开启', 'theme-textdomain' )
+	$show_hide = array(
+		'hide' => __( '隐藏', 'theme-textdomain' ),
+		'display' => __( '显示', 'theme-textdomain' )
+	);
+
+	$on_off = array(
+		'close' => __( '禁用', 'theme-textdomain' ),
+		'open' => __( '启用', 'theme-textdomain' )
 	);
 
 	$options = array();
@@ -48,15 +55,30 @@ function optionsframework_options() {
 	);
 	
 	$options[] = array(
-		'name' => __( '主题使用教程', 'theme-textdomain' ),
-		'desc' => sprintf( __( '详细使用教程点击 <a href="%1$s" target="_blank">WordPress主题『Weisay Box』</a>，若有疑问可以评论留言。', 'theme-textdomain' ), 'https://www.weisay.com/blog/wordpress-theme-weisay-box.html?weisaybox' ),
+		'name' => __( '主题使用说明', 'theme-textdomain' ),
+		'desc' => sprintf( __( '详细使用说明点击 <a href="%1$s" target="_blank">WordPress主题『Weisay Box』</a>，若有疑问可以评论留言。', 'theme-textdomain' ), 'https://www.weisay.com/blog/wordpress-theme-weisay-box.html?weisaybox' ),
 		'type' => 'info'
+	);
+
+	$options[] = array(
+		'name' => __( '网站运营年份', 'theme-textdomain' ),
+		'desc' => __( '填写网站运营年份，格式示例：2018-2023', 'theme-textdomain' ),
+		'id' => 'wei_websiteyear',
+		'std' => '',
+		'type' => 'text'
+	);
+
+	$options[] = array(
+		'name' => __( 'SEO相关', 'theme-textdomain' ),
+		'id' => 'wei_about_seo',
+		'class' => 'separate',
+		'type' => 'info',
 	);
 
 	$options[] = array(
 		'name' => __( '描述（Description）', 'theme-textdomain' ),
 		'desc' => __( '输入你的网站描述，一般不超过200个字符', 'theme-textdomain' ),
-		'id' => $shortname."_description",
+		'id' => 'wei_description',
 		'std' => '',
 		'type' => 'textarea'
 	);
@@ -64,49 +86,72 @@ function optionsframework_options() {
 	$options[] = array(
 		'name' => __( '关键词（KeyWords）', 'theme-textdomain' ),
 		'desc' => __( '输入你的网站关键字，一般不超过100个字符', 'theme-textdomain' ),
-		'id' => $shortname."_keywords",
+		'id' => 'wei_keywords',
 		'std' => '',
 		'type' => 'textarea'
 	);
-	
+
 	$options[] = array(
-		'name' => __( '是否展示ICP备案号', 'theme-textdomain' ),
-		'desc' => __( '默认隐藏', 'theme-textdomain' ),
-		'id' => $shortname."_beian",
-		'std' => 'hide',
-		'type' => 'select',
-		'options' => $whether_array
+		'id' => 'distinguish',
+		'class' => 'separate',
+		'type' => 'info',
 	);
 
 	$options[] = array(
-		'name' => __( '输入您的ICP备案号', 'theme-textdomain' ),
+		'name' => __( '网站页头自定义', 'theme-textdomain' ),
+		'desc' => __( '在页面 <code>&lt;head&gt;</code> 中添加自定义代码。可用于插入内联 CSS、JavaScript 或其他代码，如统计脚本', 'theme-textdomain' ),
+		'id' => 'wei_headcustom',
+		'std' => '',
+		'type' => 'editor',
+		'settings' => $editor_setting
+	);
+
+	$options[] = array(
+		'name' => __( '网站底部第二行自定义', 'theme-textdomain' ),
+		'desc' => __( '输入你的自定义内容，支持html', 'theme-textdomain' ),
+		'id' => 'wei_footercustom',
+		'std' => '',
+		'type' => 'editor',
+		'settings' => $editor_setting
+	);
+
+	$options[] = array(
+		'name' => __( '备案相关', 'theme-textdomain' ),
+		'id' => 'wei_about_beian',
+		'class' => 'separate',
+		'type' => 'info',
+	);
+	
+	$options[] = array(
+		'name' => __( '显示 ICP 备案号', 'theme-textdomain' ),
+		'desc' => __( '默认隐藏', 'theme-textdomain' ),
+		'id' => 'wei_beian',
+		'std' => 'hide',
+		'type' => 'select',
+		'options' => $show_hide
+	);
+
+	$options[] = array(
+		'name' => __( 'ICP 备案号', 'theme-textdomain' ),
 		'desc' => __( '填写备案号，如：沪ICP备20221105号', 'theme-textdomain' ),
-		'id' => $shortname."_beianhao",
+		'id' => 'wei_beianhao',
 		'std' => '',
 		'type' => 'text'
 	);
 	
 	$options[] = array(
-		'name' => __( '是否展示公网安备案号', 'theme-textdomain' ),
+		'name' => __( '显示公网安备案号', 'theme-textdomain' ),
 		'desc' => __( '默认隐藏', 'theme-textdomain' ),
-		'id' => $shortname."_gwab",
+		'id' => 'wei_gwab',
 		'std' => 'hide',
 		'type' => 'select',
-		'options' => $whether_array
+		'options' => $show_hide
 	);	
 	
 	$options[] = array(
-		'name' => __( '输入您的公网安备案号', 'theme-textdomain' ),
+		'name' => __( '公网安备案号', 'theme-textdomain' ),
 		'desc' => __( '填写公网安备案号，如：京公网安备 11010102002019号', 'theme-textdomain' ),
-		'id' => $shortname."_gwabh",
-		'std' => '',
-		'type' => 'text'
-	);
-	
-	$options[] = array(
-		'name' => __( '网站运营年份', 'theme-textdomain' ),
-		'desc' => __( '输入网站运营年份，如：2018-2023', 'theme-textdomain' ),
-		'id' => $shortname."_websiteyear",
+		'id' => 'wei_gwabh',
 		'std' => '',
 		'type' => 'text'
 	);
@@ -117,75 +162,96 @@ function optionsframework_options() {
 	);
 	
 	$options[] = array(
-		'name' => __( '是否启用旧版小工具', 'theme-textdomain' ),
-		'desc' => __( '默认关闭。旧版小工具相比块编辑小工具要简单一些', 'theme-textdomain' ),
-		'id' => $shortname."_widgets",
+		'name' => __( '启用旧版小工具', 'theme-textdomain' ),
+		'desc' => __( '默认禁用。相比新的区块小工具，旧版小工具操作更简单', 'theme-textdomain' ),
+		'id' => 'wei_widgets',
 		'std' => 'close',
 		'type' => 'select',
-		'options' => $whether_arrays
+		'options' => $on_off
 	);
 
 	$options[] = array(
-		'name' => __( '是否展示导航栏的搜索框', 'theme-textdomain' ),
-		'desc' => __( '默认展示', 'theme-textdomain' ),
-		'id' => $shortname."_search",
+		'name' => __( '启用经典编辑器', 'theme-textdomain' ),
+		'desc' => __( '默认禁用。开启后请勿同时启用经典编辑器（Classic Editor）插件，以免产生冲突', 'theme-textdomain' ),
+		'id' => 'wei_editor',
+		'std' => 'close',
+		'type' => 'select',
+		'options' => $on_off
+	);
+
+	$options[] = array(
+		'name' => __( '加载区块编辑器内联样式', 'theme-textdomain' ),
+		'desc' => __( '默认启用，前台页面 <code>&lt;head&gt;</code> 中会加载区块编辑器相关的内联样式。如果你只使用经典编辑器，建议禁用此选项。', 'theme-textdomain' ),
+		'id' => 'wei_gutenberg_css',
+		'std' => 'open',
+		'type' => 'select',
+		'options' => $on_off
+	);
+
+	$options[] = array(
+		'name' => __( '显示导航栏搜索框', 'theme-textdomain' ),
+		'desc' => __( '默认显示', 'theme-textdomain' ),
+		'id' => 'wei_search',
 		'std' => 'display',
 		'type' => 'select',
-		'options' => $whether_array
+		'options' => $show_hide
+	);
+
+	$options[] = array(
+		'name' => __( '显示评论表情', 'theme-textdomain' ),
+		'desc' => __( '默认显示', 'theme-textdomain' ),
+		'id' => 'wei_smilies',
+		'std' => 'display',
+		'type' => 'select',
+		'options' => $show_hide
 	);
 	
 	$options[] = array(
-		'name' => __( '是否展示顶部独立页面链接', 'theme-textdomain' ),
-		'desc' => __( '默认展示', 'theme-textdomain' ),
-		'id' => $shortname."_toppage",
+		'name' => __( '显示侧边栏读者墙', 'theme-textdomain' ),
+		'desc' => __( '默认显示', 'theme-textdomain' ),
+		'id' => 'wei_hotreviewer',
 		'std' => 'display',
 		'type' => 'select',
-		'options' => $whether_array
+		'options' => $show_hide
 	);
 	
 	$options[] = array(
-		'name' => __( '是否展示评论表情', 'theme-textdomain' ),
-		'desc' => __( '默认展示', 'theme-textdomain' ),
-		'id' => $shortname."_smilies",
-		'std' => 'display',
-		'type' => 'select',
-		'options' => $whether_array
-	);
-	
-	$options[] = array(
-		'name' => __( '是否显示侧边栏读者墙', 'theme-textdomain' ),
-		'desc' => __( '默认展示', 'theme-textdomain' ),
-		'id' => $shortname."_hotreviewer",
-		'std' => 'display',
-		'type' => 'select',
-		'options' => $whether_array
-	);
-	
-	$options[] = array(
-		'name' => __( '是否显示侧边栏标签云集', 'theme-textdomain' ),
+		'name' => __( '显示侧边栏标签云集', 'theme-textdomain' ),
 		'desc' => __( '默认隐藏', 'theme-textdomain' ),
-		'id' => $shortname."_tags",
+		'id' => 'wei_tags',
 		'std' => 'hide',
 		'type' => 'select',
-		'options' => $whether_array
+		'options' => $show_hide
+	);
+
+	$options[] = array(
+		'name' => __( '侧边栏热门日志天数范围', 'theme-textdomain' ),
+		'desc' => __( '默认选择最近365天的文章，可以根据文章发布频次自行调整选择的天数范围', 'theme-textdomain' ),
+		'id' => 'wei_hotpostno',
+		'std' => '365',
+		'class' => 'mini',
+		'type' => 'text'
 	);
 	
 	$options[] = array(
-		'name' => __( '首页展示某分类友链', 'theme-textdomain' ),
-		'desc' => __( '如果友链有分类，可以在首页展示某分类的友链，填写分类ID，全展示则不需要修改', 'theme-textdomain' ),
-		'id' => $shortname."_linkid",
+		'name' => __( '首页显示某分类友链', 'theme-textdomain' ),
+		'desc' => __( '如果友链有分类，可以在首页显示某分类的友链，填写分类ID，全显示则不需要修改', 'theme-textdomain' ),
+		'id' => 'wei_linkid',
 		'std' => '0',
 		'class' => 'mini',
 		'type' => 'text'
 	);
-	
+
 	$options[] = array(
-		'name' => __( '侧边栏热门日志天数范围', 'theme-textdomain' ),
-		'desc' => __( '默认选择最近365天的文章，可以根据文章发布频次自行调整选择的天数范围', 'theme-textdomain' ),
-		'id' => $shortname."_hotpostno",
-		'std' => '365',
-		'class' => 'mini',
-		'type' => 'text'
+		'name' => __( '友情链接页面显示', 'theme-textdomain' ),
+		'desc' => __( '完整链接可以显示图片、名称和描述（需先填写），基础链接则不显示描述', 'theme-textdomain' ),
+		'id' => 'wei_linkpage',
+		'std' => 'one',
+		'type' => 'select',
+		'options' => array(
+			'one' => __( '完整链接信息', 'theme-textdomain' ),
+			'two' => __( '基础链接信息', 'theme-textdomain' ),
+		)
 	);
 	
 	$options[] = array(
@@ -195,8 +261,8 @@ function optionsframework_options() {
 	
 	$options[] = array(
 		'name' => __( '缩略图类型', 'theme-textdomain' ),
-		'desc' => __( '选择缩略图展示的优先级，> 符号前面的优先展示', 'theme-textdomain' ),
-		'id' => $shortname."_thumbnail",
+		'desc' => __( '选择缩略图显示的优先级，> 符号前面的优先显示', 'theme-textdomain' ),
+		'id' => 'wei_thumbnail',
 		'std' => 'one',
 		'type' => 'select',
 		'options' => array(
@@ -207,80 +273,87 @@ function optionsframework_options() {
 	);
 	
 	$options[] = array(
-		'name' => __( '友情链接页面展示', 'theme-textdomain' ),
-		'desc' => __( '完整链接可以展示图片、名称和描述（需先填写），基础链接则不展示描述', 'theme-textdomain' ),
-		'id' => $shortname."_linkpage",
+		'name' => __( 'Gravatar头像替换源', 'theme-textdomain' ),
+		'desc' => __( '解决Gravatar可能无法显示的问题，默认使用Weavatar', 'theme-textdomain' ),
+		'id' => 'wei_gravatar',
 		'std' => 'one',
 		'type' => 'select',
 		'options' => array(
-			'one' => __( '完整链接信息', 'theme-textdomain' ),
-			'two' => __( '基础链接信息', 'theme-textdomain' ),
-		)
-	);
-	
-	$options[] = array(
-		'name' => __( 'Gravatar头像替换源', 'theme-textdomain' ),
-		'desc' => __( '解决Gravatar无法展示的问题，默认使用Weavatar', 'theme-textdomain' ),
-		'id' => $shortname."_gravatar",
-		'std' => '1',
-		'type' => 'select',
-		'options' => array(
-			'0' => __( '官方源', 'theme-textdomain' ),
-			'1' => __( 'Weavatar源', 'theme-textdomain' ),
-			'2' => __( 'Cravatar源', 'theme-textdomain' ),
-			'3' => __( 'Loli.net源', 'theme-textdomain' ),
-			'4' => __( 'Sep.cc源', 'theme-textdomain' ),
+			'zero' => __( '官方源', 'theme-textdomain' ),
+			'one' => __( 'Weavatar源', 'theme-textdomain' ),
+			'two' => __( 'Cravatar源', 'theme-textdomain' ),
+			'three' => __( 'Loli.net源', 'theme-textdomain' ),
+			'four' => __( 'sep.cc源', 'theme-textdomain' ),
 		)
 	);
 
 	$options[] = array(
-		'name' => __( '是否开启代码高亮功能(Prism.js)', 'theme-textdomain' ),
-		'desc' => __( '默认关闭', 'theme-textdomain' ),
-		'id' => $shortname."_prismjs",
-		'std' => 'hides',
+		'name' => __( '启用代码高亮(Prism.js)', 'theme-textdomain' ),
+		'desc' => __( '默认禁用', 'theme-textdomain' ),
+		'id' => 'wei_prismjs',
+		'std' => 'close',
 		'type' => 'select',
-		'options' => $whether_arrays
+		'options' => $on_off
 	);
 
 	$options[] = array(
-		'name' => __( '是否开启走心评论功能', 'theme-textdomain' ),
-		'desc' => __( '默认关闭', 'theme-textdomain' ),
-		'id' => $shortname."_touching",
-		'std' => 'hides',
+		'name' => __( '屏蔽非中文评论', 'theme-textdomain' ),
+		'desc' => __( '默认禁用，开启后，评论内容必须包含中文，否则无法提交', 'theme-textdomain' ),
+		'id' => 'wei_chinese',
+		'std' => 'close',
 		'type' => 'select',
-		'options' => $whether_arrays
+		'options' => $on_off
 	);
 
 	$options[] = array(
-		'name' => __( '是否展示独立页面顶部随机图片', 'theme-textdomain' ),
-		'desc' => __( '默认展示', 'theme-textdomain' ),
-		'id' => $shortname."_tcbgimg",
+		'name' => __( '走心评论相关', 'theme-textdomain' ),
+		'id' => 'wei_about_touching',
+		'class' => 'separate',
+		'type' => 'info',
+	);
+
+	$options[] = array(
+		'name' => __( '启用走心评论', 'theme-textdomain' ),
+		'desc' => __( '默认禁用', 'theme-textdomain' ),
+		'id' => 'wei_touching',
+		'class' => 'sub-level',
+		'std' => 'close',
+		'type' => 'select',
+		'options' => $on_off
+	);
+
+	$options[] = array(
+		'name' => __( '显示走心评论页顶部随机图', 'theme-textdomain' ),
+		'desc' => __( '默认显示', 'theme-textdomain' ),
+		'id' => 'wei_tcbgimg',
+		'class' => 'sub-level',
 		'std' => 'display',
 		'type' => 'select',
-		'options' => $whether_array
+		'options' => $show_hide
 	);
 
 	$options[] = array(
-		'name' => __( '走心评论独立页面子标题', 'theme-textdomain' ),
-		'desc' => __( '自定义子标题，需要展示随机背景图片才可见，不填展示默认文案「每一条评论，都是一个故事！」', 'theme-textdomain' ),
-		'id' => $shortname."_tctagline",
+		'name' => __( '走心评论页子标题', 'theme-textdomain' ),
+		'desc' => __( '自定义子标题，仅在显示随机背景图片时生效，未填写时显示默认文案：「每一条评论，都是一个故事！」', 'theme-textdomain' ),
+		'id' => 'wei_tctagline',
 		'class' => 'sub-level',
 		'std' => '',
 		'type' => 'text'
 	);
 
 	$options[] = array(
-		'name' => __( '输入您的走心评论独立页面链接', 'theme-textdomain' ),
-		'desc' => __( '评论中入选走心评论按钮的链接，可不填；若填写请填写完整链接地址，需包含http或者https', 'theme-textdomain' ),
-		'id' => $shortname."_touchingurl",
+		'name' => __( '走心评论页链接', 'theme-textdomain' ),
+		'desc' => __( '评论中入选走心评论的链接。可不填写，如填写，请使用完整 URL，需包含 http:// 或 https://', 'theme-textdomain' ),
+		'id' => 'wei_touchingurl',
+		'class' => 'sub-level',
 		'std' => '',
 		'type' => 'text'
 	);
 
 	$options[] = array(
-		'name' => __( '走心评论独立页面显示几列', 'theme-textdomain' ),
+		'name' => __( '走心评论页列数', 'theme-textdomain' ),
 		'desc' => __( '此设置只针对pc端，移动端根据宽度自适应', 'theme-textdomain' ),
-		'id' => $shortname."_touchingcol",
+		'id' => 'wei_touchingcol',
 		'class' => 'sub-level',
 		'std' => '4',
 		'type' => 'radio',
@@ -293,30 +366,116 @@ function optionsframework_options() {
 	);
 
 	$options[] = array(
+		'name' => __( '评论邮件设置', 'theme-textdomain' ),
+		'type' => 'heading'
+	);
+
+	$options[] = array(
+		'name' => '',
+		'desc' => __( '提示：如果使用本主题自带的评论回复邮件通知功能，请勿同时启用类似插件，以免产生冲突。', 'theme-textdomain' ),
+		'class' => 'tips',
+		'type' => 'info'
+	);
+
+	$options[] = array(
+		'name' => __( '启用评论邮件通知', 'theme-textdomain' ),
+		'desc' => __( '默认禁用，开启后，如 SMTP 功能正常，管理员回复评论时将邮件通知原评论用户', 'theme-textdomain' ),
+		'id' => 'wei_smtp',
+		'std' => 'close',
+		'type' => 'select',
+		'options' => $on_off
+	);
+
+	$options[] = array(
+		'name' => __( 'SMTP 邮件设置', 'theme-textdomain' ),
+		'id' => 'wei_about_smtp',
+		'class' => 'separate',
+		'type' => 'info',
+	);
+
+	$options[] = array(
+		'name' => __( 'SMTP 服务器地址', 'theme-textdomain' ),
+		'desc' => __( '常见的SMTP服务器地址包括smtp.qq.com、smtp.163.com、smtp.126.com、smtp.gmail.com等', 'theme-textdomain' ),
+		'id' => 'wei_smtp_host',
+		'class' => 'sub-level',
+		'std' => '',
+		'type' => 'text'
+	);
+
+	$options[] = array(
+		'name' => __( 'SMTP 端口', 'theme-textdomain' ), 'SMTP 端口',
+		'desc' => __( 'SMTP服务器的端口号通常为465或者587，具体取决于您的邮件服务提供商要求的设置', 'theme-textdomain' ),
+		'id' => 'wei_smtp_port',
+		'class' => 'sub-level',
+		'std' => '',
+		'type' => 'text'
+	);
+
+	$options[] = array(
+		'name' => __( 'SMTP 加密方式', 'theme-textdomain' ),
+		'desc' => __( '通常可以选择SSL/TLS加密方式来确保邮件传输的安全性', 'theme-textdomain' ),
+		'id' => 'wei_smtp_secure',
+		'class' => 'sub-level',
+		'std' => 'ssl',
+		'type' => 'select',
+		'options' => array(
+			'ssl' => 'SSL',
+			'tls' => 'TLS',
+			'' => '无加密'
+		)
+	);
+
+	$options[] = array(
+		'name' => __( 'SMTP 登录邮箱', 'theme-textdomain' ),
+		'desc' => __( '请输入SMTP邮箱地址', 'theme-textdomain' ),
+		'id' => 'wei_smtp_username',
+		'class' => 'sub-level',
+		'std' => '',
+		'type' => 'text'
+	);
+
+	$options[] = array(
+		'name' => __( 'SMTP 授权码/密码', 'theme-textdomain' ),
+		'desc' => __( '建议使用授权码', 'theme-textdomain' ),
+		'id' => 'wei_smtp_password',
+		'class' => 'sub-level',
+		'std' => '',
+		'type' => 'password'
+	);
+
+	$options[] = array(
+		'name' => __( '发件人名称', 'theme-textdomain' ),
+		'id' => 'wei_smtp_from_name',
+		'class' => 'sub-level',
+		'std' => get_bloginfo('name'),
+		'type' => 'text'
+	);
+
+	$options[] = array(
 		'name' => __( '打赏设置', 'theme-textdomain' ),
 		'type' => 'heading'
 	);
 
 	$options[] = array(
-		'name' => __( '是否展示文章页打赏', 'theme-textdomain' ),
-		'desc' => __( '默认隐藏', 'theme-textdomain' ),
-		'id' => $shortname."_reward",
+		'name' => __( '显示文章底部打赏', 'theme-textdomain' ),
+		'desc' => __( '默认隐藏，开启此功能前，请确保文章底部作者信息已显示', 'theme-textdomain' ),
+		'id' => 'wei_reward',
 		'std' => 'hide',
 		'type' => 'select',
-		'options' => $whether_array
+		'options' => $show_hide
 	);
 
 	$options[] = array(
 		'name' => __( '支付宝收款二维码图片', 'theme-textdomain' ),
 		'desc' => __( '支付宝收款二维码图片，大小建议：170px*170px', 'theme-textdomain' ),
-		'id' => $shortname."_alipay",
+		'id' => 'wei_alipay',
 		'type' => 'upload'
 	);
 	
 	$options[] = array(
 		'name' => __( '微信收款二维码图片', 'theme-textdomain' ),
 		'desc' => __( '微信收款二维码图片，大小建议：170px*170px', 'theme-textdomain' ),
-		'id' => $shortname."_wxpay",
+		'id' => 'wei_wxpay',
 		'type' => 'upload'
 	);
 
@@ -328,7 +487,7 @@ function optionsframework_options() {
 
 	$options[] = array(
 		'desc' => get_changelog_content(),
-		'id' => $shortname . "_changelog",
+		'id' => 'wei_changelog',
 		'type' => 'info'
 	);
 

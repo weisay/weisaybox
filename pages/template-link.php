@@ -17,7 +17,7 @@ Template Name: 友情链接
 $content = trim(get_the_content());
 if (!empty($content)) : ?>
 <div class="article article_c">
-<div class="link-content">
+<div class="link-content entry-content">
 <?php the_content('Read more...'); ?>
 </div>
 </div>

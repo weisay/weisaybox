@@ -119,6 +119,27 @@ $comment_parent = isset($_POST['comment_parent']) ? absint($_POST['comment_paren
 
 $commentdata = compact('comment_post_ID', 'comment_author', 'comment_author_email', 'comment_author_url', 'comment_content', 'comment_type', 'comment_parent', 'user_ID');
 
+// 垃圾评论禁止提交
+if (!is_user_logged_in()) { // 登录用户跳过检查
+	if (wp_check_comment_disallowed_list(
+		$commentdata['comment_author'],
+		$commentdata['comment_author_email'],
+		$commentdata['comment_author_url'],
+		$commentdata['comment_content'],
+		$_SERVER['REMOTE_ADDR'],
+		$_SERVER['HTTP_USER_AGENT']
+	)) {
+		err(__('禁止发表评论！'));
+	}
+}
+
+// 中文检查
+if (weisay_option('wei_chinese') == 'open') {
+	if (!preg_match('/\p{Han}/u', $comment_content)) {
+		err(__('评论必须包含中文！'));
+	}
+}
+
 // 增加: 檢查評論是否正被編輯, 更新或新建評論--修改
 if ( $edit_id ){
 if($_SESSION['comment_id']==$edit_id){

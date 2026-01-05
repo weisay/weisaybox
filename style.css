@@ -5,7 +5,7 @@
 	Author: Weisay
 	Author URI: https://www.weisay.com
 	Tags: 响应式,深色模式,两栏,经典,设置简单,代码高亮,特色图片,小工具,自定义菜单,走心评论,ajax评论,威言威语
-	Version: 5.1.0
+	Version: 5.2.0
 */
 *{border:0;margin:0;padding:0;}
 @media screen and (max-width:319px){
@@ -156,8 +156,8 @@ img.alignleft,img.alignright,img.aligncenter,img.alignnone{margin-bottom:0.5rem;
 .fenye a:hover span{color:#fff;border:1px #444 solid;background:#444;}
 .fenye .fenye_next{margin-left:0.425rem;}
 /* 友情链接 */
-.link-content{padding:0.75rem;}
-.link-content p{line-height:1.75rem;}
+.main .link-content{padding:0.75rem;}
+.main .link-content p{text-indent:0;}
 .links-box{}
 .links-box h2.links-title{font-size:1.33333rem;line-height:2.66667rem;font-weight:700;padding:0.27778rem 0.83333rem 0.27778rem 0.83333rem;clear:both;}
 .links-box ul{list-style:none;padding:0 0.83333rem;display:grid;grid-column-gap:0.25rem;grid-row-gap:0.5rem;}
@@ -619,8 +619,8 @@ a.car-toggler{line-height:2rem;color:#c30;}
 select#archive-selector{font-size:0.875rem;border:1px #ccc solid;width:6rem;height:1.75rem;line-height:1.75rem;margin-right:2rem;padding-left:0.75rem;}
 .archive-count{padding-left:6px;font-size:0.75rem;color:#777;}
 /* 友情链接 */
-.link-content{padding:15px;}
-.link-content p{line-height:1.75rem;}
+.main .link-content{padding:15px;}
+.main .link-content p{text-indent:0;}
 .links-box{}
 .links-box .links-title{padding:15px;font-weight:normal;clear:both;}
 .links-box ul{list-style:none;margin:5px 15px 15px 15px;display:grid;grid-template-columns:repeat(3, 1fr);grid-gap:0.875rem;}
@@ -691,7 +691,7 @@ select#archive-selector{font-size:0.875rem;border:1px #ccc solid;width:6rem;heig
 /* 404 */
 .sorry img{margin:0 auto;display:block;padding:20px 0;}
 /* 翻屏 */
-.roll{bottom:90px;float:right;position:fixed;right:20px;width:32px;z-index:92;}
+.roll{bottom:110px;float:right;position:fixed;right:20px;width:32px;z-index:92;}
 .roll_dark,.roll_top,.roll_comm,.roll_down{position:relative;cursor:pointer;height:32px;width:32px;margin-top:10px;border-radius:4px;opacity:0.5;}
 .roll_dark{background:#989898 url("images/dark.png") no-repeat center;}
 .roll_top{background:#989898 url("images/up.png") no-repeat center;}
@@ -702,7 +702,7 @@ select#archive-selector{font-size:0.875rem;border:1px #ccc solid;width:6rem;heig
 .roll_comm:hover{background:#767676 url("images/comm.png") no-repeat center;}
 .roll_down:hover{background:#767676 url("images/down.png") no-repeat center;}
 /* 底部 */
-#footer{height:70px;background:url("images/footer.png") repeat;border-top:8px solid #ebebeb;min-width:990px;margin-top:15px;display:flex;flex-direction:column;justify-content:center;align-items:center;}
+#footer{height:90px;background:url("images/footer.png") repeat;border-top:8px solid #ebebeb;min-width:990px;margin-top:15px;display:flex;flex-direction:column;justify-content:center;align-items:center;}
 #footer p{font-size:0.825rem;color:#888;line-height:2rem;}
 #footer a:link, #footer a:visited{color:#888;}
 }

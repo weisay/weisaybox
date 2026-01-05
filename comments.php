@@ -10,7 +10,7 @@ if ( post_password_required() ) {
 ?>
 <div id="comments" class="comments-area">
 <?php if ( have_comments() ) : ?>
-<h3 class="subtitle"><span class="comments_title"><?php the_title(); ?>：</span>目前有 <?php comments_number('', '1 条评论', '% 条评论' );?></h3>
+<h3 id="comments-title" class="subtitle"><span class="comments_title"><?php the_title(); ?>：</span>目前有 <?php comments_number('', '1 条评论', '% 条评论' );?></h3>
 <div id="pagetext">
 <ol class="comment-list">
 <?php wp_list_comments('type=comment&callback=weisay_comment&end-callback=weisay_end_comment&max_depth=' .get_option('thread_comments_depth'). ' '); ?>
@@ -65,16 +65,16 @@ jQuery('#commentpager a').click(function(){
 <?php
 $wei_gravatar = weisay_option('wei_gravatar');
 switch ($wei_gravatar) {
-	case '0':
+	case 'zero':
 		$gravatarurl = 'https://secure.gravatar.com/avatar/';
 		break;
-	case '2':
+	case 'two':
 		$gravatarurl = 'https://cravatar.cn/avatar/';
 		break;
-	case '3':
+	case 'three':
 		$gravatarurl = 'https://gravatar.loli.net/avatar/';
 		break;
-	case '4':
+	case 'four':
 		$gravatarurl = 'https://cdn.sep.cc/avatar/';
 		break;
 	default:
@@ -105,7 +105,7 @@ jQuery(document).ready(function ($) {
 <div class="author"><?php printf(__('欢迎回来 <strong>%s</strong>'), $comment_author); ?>
 <a href="javascript:toggleCommentAuthorInfo();" id="toggle-comment-author-info">[ 更改 ]</a></div>
 <script type="text/javascript">
-const changeMsg="[更改]",closeMsg="[隐藏]";function toggleCommentAuthorInfo(){$('#comment-author-info').slideToggle('slow',function(){$(this).is(':visible')?$('#toggle-comment-author-info').text(closeMsg):$('#toggle-comment-author-info').text(changeMsg);});}$(function(){$('#comment-author-info').hide();});
+const changeMsg="[ 更改 ]",closeMsg="[ 隐藏 ]";function toggleCommentAuthorInfo(){jQuery('#comment-author-info').slideToggle('slow',function(){jQuery(this).is(':visible')?jQuery('#toggle-comment-author-info').text(closeMsg):jQuery('#toggle-comment-author-info').text(changeMsg);});}jQuery(function(){jQuery('#comment-author-info').hide();});
 </script>
 <?php endif; ?>
 <div id="real-avatar">
