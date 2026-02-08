@@ -133,13 +133,6 @@ if (!is_user_logged_in()) { // 登录用户跳过检查
 	}
 }
 
-// 中文检查
-if (weisay_option('wei_chinese') == 'open') {
-	if (!preg_match('/\p{Han}/u', $comment_content)) {
-		err(__('评论必须包含中文！'));
-	}
-}
-
 // 增加: 檢查評論是否正被編輯, 更新或新建評論--修改
 if ( $edit_id ){
 if($_SESSION['comment_id']==$edit_id){
@@ -168,7 +161,7 @@ $tmp_c = get_comment($tmp_c->comment_parent);
 <li <?php comment_class(); ?> id="li-comment-<?php comment_ID() ?>">
 <div id="div-comment-<?php comment_ID() ?>" class="comment-body">
 	<div class="comment-meta">
-		<div class="comment-author vcard"><?php echo get_avatar( $comment->comment_author_email, 40, '', get_comment_author() ); ?></div>
+		<div class="comment-author vcard"><?php echo get_avatar( $comment->comment_author_email, 72, '', get_comment_author() ); ?></div>
 		<b class="fn comment-name"><?php comment_author_link() ?></b>
 		<div class="comment-metadata">
 		<?php comment_date('Y-m-d') ?> <?php comment_time() ?><?php edit_comment_link('编辑','&nbsp;&nbsp;•&nbsp;&nbsp;',''); ?>

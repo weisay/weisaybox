@@ -98,9 +98,9 @@ jQuery(document).ready(function ($) {
 <?php if ( get_option('comment_registration') && !is_user_logged_in() ) : ?>
 <p class="must-log-in"><?php print '您必须'; ?><a href="<?php echo esc_url( wp_login_url(get_permalink()) ); ?>">[ 登录 ]</a> 才能发表评论！</p>
 <?php else : ?>
-<form action="<?php echo esc_url( site_url( '/wp-comments-post.php' ) ); ?>" method="post" id="commentform">
+<form action="<?php echo esc_url( home_url( '/wp-comments-post.php' ) ); ?>" method="post" id="commentform">
 <?php if ( is_user_logged_in() ) : ?>
-<p><?php print '登录者：'; ?> <a href="<?php bloginfo('url'); ?>/wp-admin/profile.php"><?php echo $user_identity; ?></a>&nbsp;&nbsp;<a href="<?php echo wp_logout_url(get_permalink()); ?>" title="注销登录"><?php print '[ 注销 ]'; ?></a></p>
+<p><?php print '登录者：'; ?> <a href="<?php echo admin_url('profile.php'); ?>"><?php echo $user_identity; ?></a>&nbsp;&nbsp;<a href="<?php echo wp_logout_url(get_permalink()); ?>" title="注销登录"><?php print '[ 注销 ]'; ?></a></p>
 <?php elseif ( '' != $comment_author ): ?>
 <div class="author"><?php printf(__('欢迎回来 <strong>%s</strong>'), $comment_author); ?>
 <a href="javascript:toggleCommentAuthorInfo();" id="toggle-comment-author-info">[ 更改 ]</a></div>
@@ -110,11 +110,11 @@ const changeMsg="[ 更改 ]",closeMsg="[ 隐藏 ]";function toggleCommentAuthorI
 <?php endif; ?>
 <div id="real-avatar">
 <?php if ( is_user_logged_in() ) : ?>
-<?php $current_user = wp_get_current_user(); echo get_avatar( $current_user->user_email, 50, '', $current_user->display_name ); ?>
+<?php $current_user = wp_get_current_user(); echo get_avatar( $current_user->user_email, 72, '', $current_user->display_name ); ?>
 <?php elseif(isset($_COOKIE['comment_author_email_'.COOKIEHASH])) : ?>
-<?php echo get_avatar( $comment_author_email, 50, '', 'gravatar' );?>
+<?php echo get_avatar( $comment_author_email, 72, '', 'gravatar' );?>
 <?php else: ?>
-<?php global $user_email;?><?php echo get_avatar( $user_email, 50, '', 'gravatar' ); ?>
+<?php global $user_email;?><?php echo get_avatar( $user_email, 72, '', 'gravatar' ); ?>
 <?php endif; ?>
 </div>
 <?php if ( !is_user_logged_in() ) : ?>

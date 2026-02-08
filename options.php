@@ -28,8 +28,6 @@ function get_changelog_content() {
 }
 
 function optionsframework_options() {
-	$shortname = "wei";
-
 	$editor_setting = array(
 		'quicktags' => 1,
 		'tinymce' => 0,
@@ -384,6 +382,27 @@ function optionsframework_options() {
 		'std' => 'close',
 		'type' => 'select',
 		'options' => $on_off
+	);
+
+	$options[] = array(
+		'name' => __( '发送测试邮件', 'theme-textdomain' ),
+		'id' => 'wei_test_mail_info',
+		'type' => 'info',
+		'desc' => '完成下方的 SMTP 配置后，点击右侧按钮发送测试邮件到管理员邮箱（<strong>确保已开启上方的评论邮件通知</strong>）<br><br>
+			<button type="button" id="wei_send_test_mail" class="button button-primary">发送测试邮件</button>
+			<span id="wei_test_mail_result" style="margin-left:10px;"></span>'
+	);
+
+	$options[] = array(
+		'name' => __( '普通用户回复他人时通知对方', 'theme-textdomain' ),
+		'desc' => __( '默认不通知，开启后请谨慎使用，以避免垃圾评论打扰用户', 'theme-textdomain' ),
+		'id' => 'wei_notify_user',
+		'std' => '2',
+		'type' => 'radio',
+		'options' => array(
+			'1' => '通知',
+			'2' => '不通知',
+		)
 	);
 
 	$options[] = array(

@@ -11,9 +11,9 @@ Template Name: 标签索引
 jQuery(document).on('click','.tag-index a[href^="#"]',function(e){e.preventDefault();var href=jQuery(this).attr('href');var targetId=href;var selector='#'+CSS.escape(targetId.substring(1));var $target=jQuery(selector);if($target.length){var pos=$target.offset().top;jQuery('html, body').animate({scrollTop:pos},400)}});
 </script>
 <div id="content">
-<div class="main main-all">
+<div class="main main-all" role="main">
 <div id="map">
-<div class="site">当前位置： <a title="返回首页" href="<?php bloginfo('url'); ?>/">首页</a> &gt; <?php the_title(); ?></div>
+<div class="site">当前位置： <a title="返回首页" href="<?php echo esc_url( home_url('/') ); ?>">首页</a> &gt; <?php the_title(); ?></div>
 </div>
 <div class="article article_c page-tag">
 <?php tag_groups_html(); ?>

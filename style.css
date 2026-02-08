@@ -1,11 +1,17 @@
 ﻿/* 
-	Theme Name: Weisay Box
-	Theme URL: https://www.weisay.com/blog/wordpress-theme-weisay-box.html
-	Description: WordPress响应式博客主题，自适应PC端和手机端，上手简单，经典耐看！点击获得 <a href="https://www.weisay.com/blog/wordpress-theme-weisay-box.html">Weisay Box</a> 主题使用帮助。
-	Author: Weisay
-	Author URI: https://www.weisay.com
-	Tags: 响应式,深色模式,两栏,经典,设置简单,代码高亮,特色图片,小工具,自定义菜单,走心评论,ajax评论,威言威语
-	Version: 5.2.0
+Theme Name: Weisay Box
+Theme URI: https://www.weisay.com/blog/wordpress-theme-weisay-box.html
+Description: WordPress响应式博客主题，自适应PC端和手机端，上手简单，经典耐看！点击获得 <a href="https://www.weisay.com/blog/wordpress-theme-weisay-box.html">Weisay Box</a> 主题使用帮助。
+Author: Weisay
+Author URI: https://www.weisay.com
+Tags: 响应式,深色模式,两栏,经典,设置简单,代码高亮,特色图片,小工具,自定义菜单,走心评论,ajax评论,威言威语
+Version: 5.2.1
+Requires at least: 6.0
+Requires PHP: 7.3
+Tested up to: 6.9
+Text Domain: weisaybox
+License: GNU General Public License v2 or later
+License URI: https://www.gnu.org/licenses/gpl-2.0.html
 */
 *{border:0;margin:0;padding:0;}
 @media screen and (max-width:319px){
@@ -235,7 +241,7 @@ img.alignleft,img.alignright,img.aligncenter,img.alignnone{margin-bottom:0.5rem;
 .touching-waterfall .touching-list{position:relative;padding:0;margin:0 0.75rem 1rem 0.75rem;list-style:none;min-height:20rem;opacity:0;}
 .touching-waterfall .touching-list .comment-info{display:flex;justify-content:space-between;align-items:center;margin-bottom:0.75rem;}
 .touching-waterfall .touching-list .comment-name{font-size:0.875rem;padding-bottom:0.375rem;}
-.touching-waterfall .touching-list .comment-avatar img{border-radius:50%}
+.touching-waterfall .touching-list .comment-avatar img{border-radius:50%;width:3rem;height:3rem;}
 .touching-waterfall .touching-list .comment-datetime{font-size:0.75rem;color:#999;}
 .touching-waterfall .touching-list .comment-content p{font-size:1rem;line-height:1.75rem;color:#444;}
 .touching-waterfall .touching-list .comment-content .comment_at{display:none;}
@@ -318,15 +324,15 @@ h3{font-size:1.125rem;font-weight:normal;}
 .toppage{float:left;font-size:1rem;}
 .toppage ul{list-style:none;margin:0;padding:0;position:absolute;z-index:20;}
 .toppage li{height:44px;line-height:44px;float:left;font-weight:bold;} 
-.toppage a:link, .toppage a:visited{color:#bbb;line-height:44px;display:block;padding:0 1.75rem 0 1rem;}
+.toppage a:link, .toppage a:visited{color:#bbb;display:block;padding:0 1.75rem 0 1rem;}
 .toppage a:hover{color:#fff;}
-.toppage li ul{display:none;width:9rem;}
-.toppage li li{list-style:none;background:#222222;left:0px;width:9rem;}
-.toppage li li a{display:block;}
+.toppage li ul{display:none;width:9rem;border-bottom:1px #222 solid;}
+.toppage li li{list-style:none;background:#222;left:0px;width:9rem;}
+.toppage li li a{display:block;border-top:1px #555 solid;box-sizing:border-box;}
 .toppage li li a:hover{background:#2e2e2e;}
 .toppage li.current_page_item a:link,.toppage li.current_page_item a:visited,.toppage li.current-menu-item a:link,.toppage li.current-menu-item a:visited{color:#eee;}
 .toppage ul ul li{position:relative;}
-.toppage ul ul ul{top:0px;left:9rem;z-index:21;}
+.toppage ul ul ul{top:0;left:9rem;z-index:21;}
 .toppage li a.hasmenu{background:url(images/arrow1.png) no-repeat right;}
 .toppage li a.hasmenu:hover{background:url(images/arrow1.png) no-repeat right;}
 .toppage li ul li a.hasmenu{background:url(images/arrow2.png) no-repeat right center;}
@@ -563,7 +569,7 @@ figure.wp-block-image{width:fit-content;}
 .touching-waterfall .touching-columns-4::before{content:'';display:block;--cols:4;--gap:15px;}
 .touching-waterfall .touching-list .comment-info{display:flex;justify-content:space-between;align-items:center;margin-bottom:0.75rem;}
 .touching-waterfall .touching-list .comment-name{font-size:0.875rem;padding-bottom:0.375rem;}
-.touching-waterfall .touching-list .comment-avatar img{border-radius:50%}
+.touching-waterfall .touching-list .comment-avatar img{border-radius:50%;width:3rem;height:3rem;}
 .touching-waterfall .touching-list .comment-datetime{font-size:0.75rem;color:#999;}
 .touching-waterfall .touching-list .comment-content p{font-size:1rem;line-height:1.75rem;color:#444;}
 .touching-waterfall .touching-list .comment-content .comment_at{display:none;}
@@ -595,7 +601,7 @@ figure.wp-block-image{width:fit-content;}
 #commentform p{color:#444;}
 #commentform label{color:#868686;}
 #commentform input{border:1px solid #ddd;width:11.5rem;margin:10px 6px 0 0;font-size:0.875rem;}
-#commentform textarea{width:70%;height:7rem;font-size:1rem;line-height:2rem;padding:0.5rem;margin-top:0.75rem;border:1px solid #ddd;box-shadow:inset 2px 3px 5px #eee;font-family:Microsoft YaHei,Verdana,Arial;color:#535353;}
+#commentform textarea{width:70%;height:7rem;font-size:1rem;line-height:1.75rem;padding:0.5rem;margin-top:0.75rem;border:1px solid #ddd;box-shadow:inset 2px 3px 5px #eee;font-family:Microsoft YaHei,Verdana,Arial;color:#535353;}
 #commentform textarea::-webkit-input-placeholder{color:#aaa;}
 #commentform #author{background:#fff url(images/userinfo.png) no-repeat 2px 0px;padding:4px 4px 4px 20px;}
 #commentform #email{background:#fff url(images/userinfo.png) no-repeat 2px -25px;padding:4px 4px 4px 20px;}
@@ -670,8 +676,9 @@ select#archive-selector{font-size:0.875rem;border:1px #ccc solid;width:6rem;heig
 .hotreviewer img.avatar:hover{background:#d0d0d0;}
 .r_comment{}
 .r_comment .comment-author{font-size:0.875rem;}
+.r_comment .comment-content{line-height:1.5rem;height:1.5rem;overflow:hidden;}
 .r_comment ul{list-style-type:none;}
-.r_comment ul li{line-height:1.5rem;clear:both;height:3.25rem;overflow:hidden;color:#777777;}
+.r_comment ul li{line-height:1.5rem;height:3.25rem;overflow:hidden;color:#777777;}
 .r_comment ul li img.avatar{height:2.5rem;width:2.5rem;float:left;padding:2px;margin:3px 8px 0 0;background:#fff;border:1px solid #ddd;}
 .widget .tags a{background:#eaeaea;color:#666;display:inline-block;float:left;height:2rem;line-height:2rem;text-decoration:none;margin:0.25rem;padding:0 0.5rem;white-space:nowrap;}
 .widget .tags a:hover{background:#ccc;text-decoration:none;color:#fff;}

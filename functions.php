@@ -182,7 +182,7 @@ $post_views = number_format($post_views);
 $temp .= "<li><a href=\"".get_permalink()."\" title=\"".get_the_title()."\">$post_title</a></li>";
 }
 } else {
-$temp = '<li>'.__('暂无热门日志', 'wp-postviews').'</li>'."\n";
+$temp = '<li>'.__('暂无热门日志', 'theme-textdomain').'</li>'."\n";
 }
 if($display) {
 echo $temp;
@@ -231,7 +231,7 @@ function get_timespan_most_viewed_category($type, $mode = '', $limit = 10, $disp
 	$temp .= "<li><a href=\"".get_permalink()."\" title=\"".get_the_title()."\">$post_title</a></li>";
 	}
 	} else {
-	$temp = '<li>'.__('暂无热门日志', 'wp-postviews').'</li>'."\n";
+	$temp = '<li>'.__('暂无热门日志', 'theme-textdomain').'</li>'."\n";
 	}
 	if($display) {
 		echo $temp;
@@ -386,6 +386,31 @@ if ( function_exists('add_theme_support') )
 	return $first_img;
 	}
 
+//中文评论检查
+if (weisay_option('wei_chinese') == 'open') {
+	add_filter('preprocess_comment', 'verify_chinese_comment');
+	function verify_chinese_comment($commentdata) {
+		$content = $commentdata['comment_content'];
+		if (!preg_match('/\p{Han}/u', $content)) {
+			$is_ajax = wp_doing_ajax()
+				|| (isset($_SERVER['HTTP_X_REQUESTED_WITH'])
+					&& strtolower($_SERVER['HTTP_X_REQUESTED_WITH']) === 'xmlhttprequest');
+			if ($is_ajax) {
+				status_header(400);
+				header('Content-Type: text/plain; charset=utf-8');
+				echo '评论必须包含中文内容！';
+				exit;
+			}
+			wp_die(
+				'Invalid comment content.',
+				'Comment Error',
+				array('response' => 400)
+			);
+		}
+		return $commentdata;
+	}
+}
+
 //评论
 function weisay_comment($comment, $args, $depth) {
 	$GLOBALS['comment'] = $comment;
@@ -406,7 +431,7 @@ function weisay_comment($comment, $args, $depth) {
 <div id="div-comment-<?php comment_ID() ?>" class="comment-body">
 	<?php $add_below = 'div-comment';?>
 	<div class="comment-meta">
-	<div class="comment-author vcard"><?php echo get_avatar( $comment->comment_author_email, 40, '', get_comment_author() );?></div>
+	<div class="comment-author vcard"><?php echo get_avatar( $comment->comment_author_email, 72, '', get_comment_author() );?></div>
 		<?php if ( $comment->comment_approved == '1' ) : ?>
 		<div class="comment-floor"><?php
 			if(!$parent_id = $comment->comment_parent){
@@ -446,7 +471,7 @@ function weisay_comment($comment, $args, $depth) {
 		?>
 		</span>
 	<?php if (weisay_option('wei_touching') == 'open' && current_user_can('manage_options')) : ?>
-	<span class="touching-comments-button"><a class="karma-link" data-karma="<?php echo $comment->comment_karma;?>" href="<?php echo wp_nonce_url( site_url('/comment-karma'), 'KARMA_NONCE' );?>" onclick="return post_karma(<?php comment_ID();?>, this.href, this)">
+	<span class="touching-comments-button"><a class="karma-link" data-karma="<?php echo $comment->comment_karma;?>" href="<?php echo wp_nonce_url( home_url('/comment-karma'), 'KARMA_NONCE' );?>" onclick="return post_karma(<?php comment_ID();?>, this.href, this)">
 		<?php if ($comment->comment_karma == 0) {
 		echo '<span title="加入走心"><svg class="hearticon" viewBox="0 0 1024 1024"><path d="M752 144c55.6 0 107.8 21.6 147.1 60.9S960 296.4 960 352c0 32.7-6.1 66.4-18.1 100.2-11.4 32-28.3 64.9-50.3 97.8-38.7 57.8-93.4 116.2-162.5 173.6C643 795.1 555.6 847.2 512 871.5c-43.2-24-129.4-75.1-215.2-146-69.6-57.5-124.6-116-163.7-174-22.2-33.1-39.3-66.1-50.8-98.4C70.2 418.9 64 385 64 352c0-55.6 21.6-107.8 60.9-147.1S216.4 144 272 144c76.9 0 147.2 42.2 183.6 110.1l28.2 52.7c12.1 22.5 44.4 22.5 56.4 0l28.2-52.7C604.8 186.2 675.1 144 752 144z m0-64c-101.3 0-189.7 55.4-236.5 137.6-1.5 2.7-5.4 2.7-6.9 0C461.7 135.4 373.3 80 272 80 121.8 80 0 201.8 0 352c0 338 512 592 512 592s512-255 512-592c0-150.2-121.8-272-272-272z" fill="#d81e06"></path></svg></span>';
 		} else {
@@ -473,7 +498,7 @@ function weisay_touching_comments_list($comment) {
 <p class="fn comment-name"><?php comment_author_link();?></p>
 <p class="comment-datetime"><?php comment_date('Y-m-d');?></p>
 </div>
-<div class="comment-avatar vcard"><?php echo get_avatar( $comment->comment_author_email, 48, '', get_comment_author() );?></div>
+<div class="comment-avatar vcard"><?php echo get_avatar( $comment->comment_author_email, 72, '', get_comment_author() );?></div>
 </div>
 <div class="comment-content"><?php comment_text() ?></div>
 <div class="comment-from">评论于<span class="bullet">•</span><a href="<?php echo get_comment_link($comment->comment_ID, $cpage);?>" target="_blank"><?php echo get_the_title($comment->comment_post_ID);?></a></div>

@@ -32,7 +32,7 @@ if ($counts && is_array($counts)) {
 	foreach ($counts as $count) {
 		$author = esc_attr($count->comment_author);
 		$url = esc_url($count->comment_author_url);
-		$avatar = get_avatar($count->comment_author_email, 60, '', $author);
+		$avatar = get_avatar($count->comment_author_email, 72, '', $author);
 		$mostactive .= sprintf(
 			'<li><a href="%s" title="%s (留下%d个脚印)" rel="external nofollow">%s</a></li>%s',
 			$url,

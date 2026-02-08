@@ -8,7 +8,7 @@ Template Name: 走心评论
 <div id="dark-mode-toggle-button" onclick="applyCustomDarkModeSettings(toggleCustomDarkMode());" title="点击切换显示模式" class="roll_dark"></div>
 <div title="回到顶部" class="roll_top"></div><div title="转到底部" class="roll_down"></div></div>
 <div id="content">
-<div class="main main-all">
+<div class="main main-all" role="main">
 <div id="comments" class="touching-header">
 <?php
 global $wpdb;

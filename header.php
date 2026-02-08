@@ -22,7 +22,8 @@
 <link rel="pingback" href="<?php bloginfo('pingback_url'); ?>" />
 <?php echo weisay_option('wei_headcustom'); ?>
 </head>
-<body>
+<body <?php body_class(); ?>>
+<?php wp_body_open(); ?>
 <div id="head">
 <div id="header">
 <div class="subpage">
@@ -36,25 +37,25 @@
 </div>
 <div class="webtitle">
 	<div class="blogname">
-	<h1><a href="<?php bloginfo('url'); ?>/"><?php bloginfo('name'); ?></a></h1>
+	<h1><a href="<?php echo esc_url( home_url('/') ); ?>"><?php bloginfo('name'); ?></a></h1>
 	<div class="blogtitle"><?php bloginfo('description'); ?></div></div> 
 </div>
 <div class="clear"></div>
 <div class="headermenu">
-	<a class="hamburger" onfocus="this.blur()" href="#menu"><span></span></a>
+	<a class="hamburger" onfocus="this.blur()" href="#menu" rel="nofollow" aria-label="菜单"><span></span></a>
 	<?php bloginfo('name'); ?>
 </div>
 <div class="clear"></div>
 </div>
 </div>
 <div class="mainmenus">
-<?php include('menu.php'); ?>
+<?php require get_template_directory() . '/menu.php'; ?>
 <div class="mainmenu">
 <div id="nav" class="topnav"><?php wp_nav_menu( array( 'theme_location' => 'headermenu' ) ); ?></div>
 <?php if (weisay_option('wei_search') != 'hide') : ?>
 <div class="search">
 <div class="search_site">
-<form id="searchform" method="get" action="<?php bloginfo('url'); ?>/">
+<form id="searchform" method="get" action="<?php echo esc_url( home_url('/') ); ?>">
 <input type="submit" value="" id="searchsubmit" class="button" />
 <input type="text" required="" id="s" name="s" value="" placeholder="搜索"/>
 </form>

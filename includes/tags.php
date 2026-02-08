@@ -47,7 +47,9 @@ if (!function_exists('tag_index_groups')) {
 			}
 			ksort($groups);
 			foreach ($groups as &$tag_list) {
-				usort($tag_list, fn($a,$b)=>intval($b->count)-intval($a->count));
+				usort($tag_list, function($a, $b) {
+					return intval($b->count) - intval($a->count);
+				});
 			}
 			unset($tag_list);
 			set_transient($cache_key, $groups, 12*HOUR_IN_SECONDS);

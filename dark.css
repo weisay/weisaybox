@@ -7,6 +7,7 @@
 .dark .toppage a:link, .dark .toppage a:visited{color:#bbb;}
 .dark .toppage a:hover{color:#eee;}
 .dark .toppage li li{background:#222;}
+.dark .toppage li li a{border-top:1px #333 solid;}
 .dark .toppage li li a:hover{background:#121212;}
 .dark .toppage li.current_page_item a:link,.dark .toppage li.current_page_item a:visited,.dark .toppage li.current-menu-item a:link,.dark .toppage li.current-menu-item a:visited{color:#eee;}
 .dark .toppage li ul li a.hasmenu:hover{background:#121212 url(images/arrow2.png) no-repeat right center;}
@@ -98,6 +99,7 @@
 .dark .page-tag .tag-cloud-item:hover .tag-cloud-count{background:#3a66b9;border:1px solid #3a66b9;color:#c1c4c9;}
 .dark .comment-list .comment{border-top:1px #555 solid;}
 .dark .comment-list li.comment ul.children li{border-top: 1px dashed #777;}
+.dark .comment-list .thread-odd{background:#262626;}
 .dark .comment-list .thread-even{background:#2c2c2c;}
 .dark .comment-list .comment-body:hover{background:#333;}
 .dark .comment-list .comment-body .post-author{background-color:#0088dd;color:#eee;}
@@ -196,6 +198,7 @@
 .dark .links-box ul li{background:#121212;}
 .dark .links-box .links-item a{background:#333;border:1px #555 solid;}
 .dark .article h3.subtitle{border-top:1px #555 solid;}
+.dark .comment-list .thread-odd{background:#262626;}
 .dark .comment-list .thread-even{background:#222;}
 .dark .comment-list .comment-body:hover{background:#2a2a2a;}
 .dark #commentform #author{background:#444;}

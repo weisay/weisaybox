@@ -92,3 +92,33 @@ function weisay_option( $name, $default = false ) {
 	return $default;
 }
 endif;
+
+add_action( 'optionsframework_custom_scripts', 'optionsframework_custom_scripts' );
+function optionsframework_custom_scripts() { ?>
+<script>
+var wei_send_test_mail_nonce = '<?php echo wp_create_nonce("wei_send_test_mail_nonce"); ?>';
+</script>
+<script type="text/javascript">
+jQuery(document).ready(function($){
+	$('#wei_send_test_mail').on('click', function(e){
+		e.preventDefault();
+		var $btn = $(this);
+		var $result = $('#wei_test_mail_result');
+		$btn.prop('disabled', true);
+		$result.css('color','blue').text('发送中...');
+		$.post(ajaxurl, { 
+			action: 'wei_send_test_mail',
+			nonce: wei_send_test_mail_nonce
+		}, function(response){
+			if(response.success){
+				$result.css('color', 'green').text(response.data);
+			} else {
+				$result.css('color', 'red').text(response.data);
+			}
+			$btn.prop('disabled', false);
+		});
+	});
+});
+</script>
+<?php
+}
