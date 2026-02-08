@@ -367,7 +367,7 @@ h3{font-size:1.125rem;font-weight:normal;}
 .topnav li a.hasmenu:hover{background:#efefef url(images/arrow3.png) no-repeat right;}
 .topnav li ul li a.hasmenu{background:url(images/arrow4.png) no-repeat right center;}
 .topnav li ul li a.hasmenu:hover{background:#efefef url(images/arrow4.png) no-repeat right center;}
-.search{float:right;position:relative;}
+.mainmenu .search{float:right;position:relative;}
 .search_site{position:absolute;right:0;top:0;width:11rem;z-index:9;border:1px solid #dfdfdf;border-top:none;border-bottom:none;background:#fff;overflow:hidden;}
 .search_site #searchform #s{display:block;line-height:3rem;padding:0 0.75rem;position:relative;width:68%;z-index:1;border:none;font-size:0.875rem;font-family:Verdana, Geneva, sans-serif;color:#999;outline:none;}
 .search_site #searchform #searchsubmit{border:none;cursor:pointer;display:block;height:3rem;width:3rem;padding:0;position:absolute;right:0;text-indent:-9999px;top:0;z-index:2;background:url(images/arrow7.gif) no-repeat center;}
